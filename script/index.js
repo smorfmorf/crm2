@@ -33,16 +33,16 @@ function createRow(obj) {
 
   return row;
 }
-const myObject = {
-  id: 1,
-  dataId: "24601654816512",
-  name: "Навигационная система Soundmax1",
-  category: "Техника для дома",
-  unit: "шт",
-  quantity: 5,
-  unitPrice: "$100",
-  totalPrice: "$500",
-};
+// const myObject = {
+//   id: 1,
+//   dataId: "24601654816512",
+//   name: "Навигационная система Soundmax1",
+//   category: "Техника для дома",
+//   unit: "шт",
+//   quantity: 5,
+//   unitPrice: "$100",
+//   totalPrice: "$500",
+// };
 
 // const rowHtml = createRow(myObj);
 // console.log("rowHtml: ", rowHtml);
@@ -53,6 +53,7 @@ function renderGoods(goodsArray) {
   goodsArray.forEach((item) => {
     //структура html в виде строки
     const rowHTML = createRow(item);
+    console.log("rowHTML: ", rowHTML);
 
     // Создаем  элемент (tr) для вставки строки в  HTML
     const tempDiv = document.createElement("tr");
@@ -77,3 +78,18 @@ const goodsArray = [
 ];
 
 renderGoods(goodsArray);
+
+const overlay = document.querySelector(".overlay");
+const btn = document.querySelector(".panel__add-goods");
+btn.addEventListener("click", () => {
+  overlay.classList.add("active");
+});
+
+overlay.addEventListener("click", () => {
+  overlay.classList.remove("active");
+});
+
+const overlay__modal_modal = document.querySelector(".overlay__modal.modal");
+overlay__modal_modal.addEventListener("click", (event) => {
+  event.stopPropagation();
+});
