@@ -93,3 +93,8 @@ const overlay__modal_modal = document.querySelector(".overlay__modal.modal");
 overlay__modal_modal.addEventListener("click", (event) => {
   event.stopPropagation();
 });
+
+const modal__close = document.querySelector(".modal__close");
+modal__close.addEventListener("click", () => {
+  overlay.classList.remove("active");
+});
