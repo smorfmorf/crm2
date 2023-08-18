@@ -53,7 +53,7 @@ function renderGoods(goodsArray) {
   goodsArray.forEach((item) => {
     //структура html в виде строки
     const rowHTML = createRow(item);
-    console.log("rowHTML: ", rowHTML);
+    // console.log("rowHTML: ", rowHTML);
 
     // Создаем  элемент (tr) для вставки строки в  HTML
     const tempDiv = document.createElement("tr");
@@ -64,10 +64,40 @@ function renderGoods(goodsArray) {
   });
 }
 
-const goodsArray = [
+let goodsArray = [
   {
     id: 1,
-    dataId: "24601654816512",
+    dataId: 1,
+    name: "Навигационная система Soundmax",
+    category: "Техника для дома",
+    unit: "шт",
+    quantity: 5,
+    unitPrice: "$100",
+    totalPrice: "$500",
+  },
+  {
+    id: 2,
+    dataId: 2,
+    name: "Навигационная система Soundmax",
+    category: "Техника для дома",
+    unit: "шт",
+    quantity: 5,
+    unitPrice: "$100",
+    totalPrice: "$500",
+  },
+  {
+    id: 3,
+    dataId: 3,
+    name: "Навигационная система Soundmax",
+    category: "Техника для дома",
+    unit: "шт",
+    quantity: 5,
+    unitPrice: "$100",
+    totalPrice: "$500",
+  },
+  {
+    id: 4,
+    dataId: 4,
     name: "Навигационная система Soundmax",
     category: "Техника для дома",
     unit: "шт",
@@ -85,16 +115,34 @@ btn.addEventListener("click", () => {
   overlay.classList.add("active");
 });
 
-overlay.addEventListener("click", () => {
-  overlay.classList.remove("active");
+overlay.addEventListener("click", (event) => {
+  const target = event.target;
+  if (target.classList.contains("overlay") || target.closest(".modal__close")) {
+    overlay.classList.remove("active");
+  }
 });
 
-const overlay__modal_modal = document.querySelector(".overlay__modal.modal");
-overlay__modal_modal.addEventListener("click", (event) => {
-  event.stopPropagation();
-});
+// const overlay__modal_modal = document.querySelector(".overlay__modal.modal");
+// overlay__modal_modal.addEventListener("click", (event) => {
+//   event.stopPropagation();
+// });
 
-const modal__close = document.querySelector(".modal__close");
-modal__close.addEventListener("click", () => {
-  overlay.classList.remove("active");
+//крестик
+// const modal__close = document.querySelector(".modal__close");
+// modal__close.addEventListener("click", () => {
+//   overlay.classList.remove("active");
+// });
+
+const cms = document.querySelector(".table__body ");
+cms.addEventListener("click", (event) => {
+  const target = event.target;
+  if (target.closest(".table__btn_del")) {
+    const tr = target.closest("tr");
+    const data = tr.querySelector(".table__cell_name");
+    const id = data.dataset.id;
+    goodsArray = goodsArray.filter((el) => el.id != id);
+    console.log(goodsArray);
+
+    target.closest("tr").remove();
+  }
 });
