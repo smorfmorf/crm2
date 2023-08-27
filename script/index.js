@@ -231,8 +231,33 @@ formControl(tableBody);
 const overlay_modal_button = document.querySelector(".panel__add-goods");
 overlay_modal_button.addEventListener("click", () => {
   const form_id = document.querySelector(".vendor-code__id");
-  form_id.textContent = Date.now();
+  form_id.textContent = goodsArray.length + 1;
+});
 
-  const modal__totalPrice = document.querySelector(".modal__total-price");
-  modal__totalPrice.textContent = reducerSum();
+const modal__totalPrice = document.querySelector(".modal__total-price");
+modal__totalPrice.textContent = 0;
+const count = document.getElementById("count");
+const price = document.getElementById("price");
+
+function updateTotalPrice() {
+  const newPrice = parseFloat(price.value);
+  const newCount = parseFloat(count.value);
+
+  if (!isNaN(newPrice) && !isNaN(newCount)) {
+    const totalPrice = newPrice * newCount;
+    modal__totalPrice.textContent = totalPrice + "$";
+  }
+}
+
+price.addEventListener("input", updateTotalPrice);
+count.addEventListener("input", updateTotalPrice);
+
+const tr = document.querySelectorAll(".table__body tr");
+tr.forEach((el) => {
+  const td = el.querySelectorAll("td.table__cell");
+  const count = td[4];
+  const price = td[5];
+
+  const totalPrice = (td[6].textContent =
+    price.textContent * count.textContent);
 });
