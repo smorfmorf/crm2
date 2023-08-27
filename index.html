@@ -154,7 +154,13 @@
           <fieldset class="modal__fieldset">
             <label class="modal__label modal__label_name" for="title">
               <span class="modal__text">Наименование</span>
-              <input class="modal__input" type="text" name="title" id="name" />
+              <input
+                class="modal__input"
+                type="text"
+                name="title"
+                id="name"
+                required
+              />
             </label>
 
             <label class="modal__label modal__label_category" for="category">
@@ -164,6 +170,7 @@
                 type="text"
                 name="category"
                 id="category"
+                required
               />
             </label>
 
@@ -176,12 +183,19 @@
                 class="modal__input modal__input_textarea"
                 name="description"
                 id="description"
+                required
               ></textarea>
             </label>
 
             <label class="modal__label modal__label_units" for="units">
               <span class="modal__text">Единицы измерения</span>
-              <input class="modal__input" type="text" name="units" id="units" />
+              <input
+                class="modal__input"
+                type="text"
+                name="units"
+                id="units"
+                required
+              />
             </label>
 
             <div class="modal__label modal__label_discount">
@@ -209,6 +223,7 @@
                 type="number"
                 name="count"
                 id="count"
+                required
               />
             </label>
 
@@ -219,6 +234,7 @@
                 type="number"
                 name="price"
                 id="price"
+                required
               />
             </label>
 
