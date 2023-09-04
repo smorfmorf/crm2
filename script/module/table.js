@@ -1,6 +1,7 @@
 // table.js
 
 import { goodsArray, removeGoodsById, calculateTotalPrice } from "./data.js";
+import { tableBody, cms, cms__totalPrice } from "./Elements.js";
 
 function createRow(obj) {
   const row = `     <tr>
@@ -8,7 +9,9 @@ function createRow(obj) {
     <td class="table__cell table__cell_left table__cell_name" data-id="${
       obj.id
     }">
-      <span class="table__cell-id">id: ${obj.id}</span>
+      <span class="table__cell-id">id: ${
+        obj.order === undefined ? obj.id : obj.order
+      }</span>
       ${obj.title}
     </td>
     <td class="table__cell table__cell_left">${obj.category}</td>
@@ -27,7 +30,6 @@ function createRow(obj) {
 }
 
 function renderGoodsTable() {
-  const tableBody = document.querySelector(".table__body");
   tableBody.innerHTML = ""; // Очистить таблицу перед перерисовкой
 
   goodsArray.forEach((item) => {
@@ -41,22 +43,25 @@ function renderGoodsTable() {
 function initTable() {
   renderGoodsTable();
 
-  const cms = document.querySelector(".table__body");
-  cms.addEventListener("click", (event) => {
-    const target = event.target;
-    if (target.closest(".table__btn_del")) {
-      const tr = target.closest("tr");
-      const data = tr.querySelector(".table__cell_name");
-      const id = parseInt(data.dataset.id);
-      removeGoodsById(id);
-      tr.remove();
-      cmsTotalPrce();
-    }
-  });
+  //! Добавляем новый слушатель  тут код закоментирован
+  cms.addEventListener("click", handleDeleteButtonClick);
 }
 
+function handleDeleteButtonClick(event) {
+  const target = event.target;
+  if (target.closest(".table__btn_del")) {
+    const tr = target.closest("tr");
+    const data = tr.querySelector(".table__cell_name");
+    const id = parseInt(data.dataset.id);
+    //удаляем из массива объектов данные товара
+    removeGoodsById(id);
+    //удаляем строку товара из таблицы
+    tr.remove();
+    //пересчитываем сумму товаров в таблице
+    cmsTotalPrce();
+  }
+}
 function cmsTotalPrce() {
-  const cms__totalPrice = document.querySelector(".cms__total-price");
   cms__totalPrice.textContent = calculateTotalPrice();
 }
 

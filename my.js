@@ -251,16 +251,6 @@ function updateTotalPrice() {
 price.addEventListener("input", updateTotalPrice);
 count.addEventListener("input", updateTotalPrice);
 
-// const tr = document.querySelectorAll(".table__body tr");
-// tr.forEach((el) => {
-//   const td = el.querySelectorAll("td.table__cell");
-//   const count = td[4];
-//   const price = td[5];
-
-//   const totalPrice = (td[6].textContent =
-//     price.textContent * count.textContent);
-// });
-
 //добавить данные в хранилище
 sessionStorage.setItem("key", "123");
 const ss = sessionStorage.getItem("key");

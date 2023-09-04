@@ -3,8 +3,16 @@
 import { addGoods, goodsArray } from "./data.js";
 import { initTable, cmsTotalPrce } from "./table.js";
 
-const overlay = document.querySelector(".overlay");
-const btn = document.querySelector(".panel__add-goods");
+import {
+  overlay,
+  btn,
+  overlay_modal_button,
+  form_id,
+  modal__totalPrice,
+  form,
+  count,
+  price,
+} from "./Elements.js";
 
 btn.addEventListener("click", () => {
   overlay.classList.add("active");
@@ -16,15 +24,20 @@ overlay.addEventListener("click", (event) => {
     overlay.classList.remove("active");
   }
 });
+const uniqueId = Date.now();
+
+overlay_modal_button.addEventListener("click", () => {
+  //!id - формы
+
+  form_id.textContent = uniqueId;
+});
 
 function formControl() {
-  const modal__totalPrice = document.querySelector(".modal__total-price");
-  const form = document.querySelector(".modal__form");
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const formData = new FormData(form);
     const obj = Object.fromEntries(formData);
-    addGoods(obj);
+    addGoods(obj, uniqueId);
     initTable(); // Перерисовать таблицу после добавления товара
     cmsTotalPrce();
     form.reset();
@@ -33,8 +46,6 @@ function formControl() {
   });
 
   modal__totalPrice.textContent = 0 + "$";
-  const count = document.getElementById("count");
-  const price = document.getElementById("price");
 
   count.addEventListener("input", () => {
     // Добавляем слушатель для поля количества
@@ -56,15 +67,5 @@ function formControl() {
     }
   }
 }
-
-const overlay_modal_button = document.querySelector(".panel__add-goods");
-overlay_modal_button.addEventListener("click", () => {
-  const form_id = document.querySelector(".vendor-code__id");
-  form_id.textContent = goodsArray.length + 1;
-});
-
-window.addEventListener("click", () => {
-  console.log("click");
-});
 
 export { formControl };

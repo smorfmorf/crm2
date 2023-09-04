@@ -1,3 +1,6 @@
+//data.js
+import { initTable } from "./table.js";
+
 let goodsArray = [
   {
     id: 1,
@@ -61,15 +64,33 @@ let goodsArray = [
   },
 ];
 
-function addGoods(obj) {
-  const id = goodsArray.length + 1;
-  obj.id = id;
+function addGoods(obj, uniqueId) {
+  obj.order = uniqueId;
+
+  const maxOrder = goodsArray.reduce(
+    (max, item) => (item.id > max ? item.id : max),
+    0
+  );
+  obj.id = maxOrder + 1;
+
+  console.log(obj);
   goodsArray.push(obj);
 }
 
 function removeGoodsById(id) {
   goodsArray = goodsArray.filter((el) => el.id !== id);
+
+  goodsArray.forEach((item, index) => {
+    return (item.id = index + 1);
+  });
+
+  console.log("goodsArray2: ", goodsArray);
+
+  initTable();
 }
+// window.addEventListener("click", () => {
+//   console.log("goodsArray:Click ", goodsArray);
+// });
 
 function calculateTotalPrice() {
   return goodsArray.reduce((acc, obj) => {

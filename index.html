@@ -39,7 +39,12 @@
     <link rel="stylesheet" href="css/index.css" />
     <title>CMS</title>
     <!-- <script src="./script/index.js" defer></script> -->
-    <script type="module" src="./script/app.js"></script>
+    <script type="module">
+      import { CMS } from "./script/app.js";
+      document.addEventListener("DOMContentLoaded", () => {
+        CMS.init();
+      });
+    </script>
   </head>
 
   <body>

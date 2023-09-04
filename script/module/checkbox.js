@@ -1,7 +1,5 @@
 // checkbox.js
-
-const checkbox = document.querySelector(".modal__checkbox");
-const fieldNearCheckbox = document.querySelector(".modal__input_discount");
+import { checkbox, fieldNearCheckbox } from "./Elements.js";
 
 checkbox.addEventListener("change", () => {
   if (checkbox.checked) {
