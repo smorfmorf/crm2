@@ -24,11 +24,12 @@ overlay.addEventListener("click", (event) => {
     overlay.classList.remove("active");
   }
 });
-const uniqueId = Date.now();
+
+let uniqueId = null;
 
 overlay_modal_button.addEventListener("click", () => {
+  uniqueId = Date.now();
   //!id - формы
-
   form_id.textContent = uniqueId;
 });
 

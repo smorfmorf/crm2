@@ -43,7 +43,7 @@ function renderGoodsTable() {
 function initTable() {
   renderGoodsTable();
 
-  //! Добавляем новый слушатель  тут код закоментирован
+  //! Добавляем новый слушатель
   cms.addEventListener("click", handleDeleteButtonClick);
 }
 
@@ -61,6 +61,7 @@ function handleDeleteButtonClick(event) {
     cmsTotalPrce();
   }
 }
+
 function cmsTotalPrce() {
   cms__totalPrice.textContent = calculateTotalPrice();
 }
