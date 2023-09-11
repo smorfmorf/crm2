@@ -36,7 +36,8 @@ function renderGoodsTable() {
     const rowHTML = createRow(item);
     const tempDiv = document.createElement("tr");
     tempDiv.innerHTML = rowHTML;
-    tableBody.appendChild(tempDiv);
+
+    tableBody.append(tempDiv);
   });
 }
 

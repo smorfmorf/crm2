@@ -251,20 +251,22 @@ function updateTotalPrice() {
 price.addEventListener("input", updateTotalPrice);
 count.addEventListener("input", updateTotalPrice);
 
-//добавить данные в хранилище
+//!добавить данные в хранилище сесии
 sessionStorage.setItem("key", "123");
 const ss = sessionStorage.getItem("key");
 
+//!добавить данные в хранилище локалStorage
 localStorage.setItem("key2", "12345");
 const ls = localStorage.getItem("key2");
 
-//удаление хранилища / .clear()-очищение
+//!удаление хранилища / .clear()-очищение
 localStorage.removeItem("key2");
 sessionStorage.removeItem("key");
 
-// все что отправляется в localstorage сохраняется в виде строк чтобы хранить данные в виде объектов/массивов нужно серелизовать
+//? все что отправляется в localstorage сохраняется в виде строк чтобы хранить данные в виде объектов/массивов нужно серелизовать
 localStorage.setItem("test", JSON.stringify({ name: "max" }));
-// а когда получаем (распарсиваем строку на массив или объект)
+
+//? а когда получаем (распарсиваем строку на массив или объект)
 const test = JSON.parse(localStorage.getItem("test"));
 
 //*Чтобы перебрать все данные из localstorage нужна функция специальная
