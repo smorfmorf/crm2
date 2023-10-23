@@ -1,8 +1,13 @@
 // app.js
 
+//* экспорт через (export {initTable, cmsTotalPrce} )
 import { initTable, cmsTotalPrce } from "./module/table.js";
-import { formControl } from "./module/modal.js";
-import "./module/checkbox.js"; // Импортируйте модуль для работы с чекбоксом
+
+//* импорт поумолчанию (export default formControl)
+import formControl from "./module/modal.js";
+
+//! Импортируйте все из модуля чекбокс
+import "./module/checkbox.js";
 
 export const CMS = {
   init: () => {

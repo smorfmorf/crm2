@@ -69,4 +69,4 @@ function formControl() {
   }
 }
 
-export { formControl };
+export default formControl;
