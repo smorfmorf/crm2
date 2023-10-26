@@ -110,9 +110,8 @@ input.addEventListener("input", ({ target }) => {
       .then((res) => {
         if (!res.ok) {
           throw new Error("http error: " + res.status);
-        } else {
-          return res.json();
         }
+        return res.json();
       })
       .then((data) => {
         if (data === undefined) {
