@@ -1,96 +1,81 @@
 //data.js
 import { initTable } from "./table.js";
 
-let goodsArray = [
-  {
-    id: 1,
-    title: "Смартфон Xiaomi 11T 8/128GB",
-    price: 27000,
-    description:
-      "Смартфон Xiaomi 11T – это представитель флагманской линейки, выпущенной во второй половине 2021 года. И он полностью соответствует такому позиционированию, предоставляя своим обладателям возможность пользоваться отличными камерами, ни в чем себя не ограничивать при запуске игр и других требовательных приложений.",
-    category: "mobile-phone",
-    discont: false,
-    count: 3,
-    units: "шт",
-    images: {
-      small: "img/smrtxiaomi11t-m.jpg",
-      big: "img/smrtxiaomi11t-b.jpg",
-    },
-  },
-  {
-    id: 2,
-    title: "Радиоуправляемый автомобиль Cheetan",
-    price: 4000,
-    description:
-      "Внедорожник на дистанционном управлении. Скорость 25км/ч. Возраст 7 - 14 лет",
-    category: "toys",
-    discont: 5,
-    count: 1,
-    units: "шт",
-    images: {
-      small: "img/cheetancar-m.jpg",
-      big: "img/cheetancar-b.jpg",
-    },
-  },
-  {
-    id: 3,
-    title: "ТВ приставка MECOOL KI",
-    price: 12400,
-    description:
-      "Всего лишь один шаг сделает ваш телевизор умным, Быстрый и умный MECOOL KI PRO, прекрасно спроектированный, сочетает в себе прочный процессор Cortex-A53 с чипом Amlogic S905D",
-    category: "tv-box",
-    discont: 15,
-    count: 4,
-    units: "шт",
-    images: {
-      small: "img/tvboxmecool-m.jpg",
-      big: "img/tvboxmecool-b.jpg",
-    },
-  },
-  {
-    id: 4,
-    title: "Витая пара PROConnect 01-0043-3-25",
-    price: 22,
-    description:
-      "Витая пара Proconnect 01-0043-3-25 является сетевым кабелем с 4 парами проводов типа UTP, в качестве проводника в которых используется алюминий, плакированный медью CCA. Такая неэкранированная витая пара с одножильными проводами диаметром 0.50 мм широко применяется в процессе сетевых монтажных работ. С ее помощью вы сможете обеспечить развертывание локальной сети в домашних условиях или на предприятии, объединить все необходимое вам оборудование в единую сеть.",
-    category: "cables",
-    discont: false,
-    count: 420,
-    units: "v",
-    images: {
-      small: "img/lan_proconnect43-3-25.jpg",
-      big: "img/lan_proconnect43-3-25-b.jpg",
-    },
-  },
-];
+// let goodsArray = [
+//   {
+//     id: 1,
+//     title: "Смартфон Xiaomi 11T 8/128GB",
+//     price: 27000,
+//     description:
+//       "Смартфон Xiaomi 11T – это представитель флагманской линейки, выпущенной во второй половине 2021 года. И он полностью соответствует такому позиционированию, предоставляя своим обладателям возможность пользоваться отличными камерами, ни в чем себя не ограничивать при запуске игр и других требовательных приложений.",
+//     category: "mobile-phone",
+//     discont: false,
+//     count: 3,
+//     units: "шт",
+//     images: {
+//       small: "img/smrtxiaomi11t-m.jpg",
+//       big: "img/smrtxiaomi11t-b.jpg",
+//     },
+//   },
+//   {
+//     id: 2,
+//     title: "Радиоуправляемый автомобиль Cheetan",
+//     price: 4000,
+//     description:
+//       "Внедорожник на дистанционном управлении. Скорость 25км/ч. Возраст 7 - 14 лет",
+//     category: "toys",
+//     discont: 5,
+//     count: 1,
+//     units: "шт",
+//     images: {
+//       small: "img/cheetancar-m.jpg",
+//       big: "img/cheetancar-b.jpg",
+//     },
+//   },
+// ];
+
+let goodsArray = [];
+
+function returnArray() {
+  return goodsArray;
+}
+
+fetch("https://elegant-proud-car.glitch.me/api/goods")
+  .then((res) => res.json())
+  .then((data) => {
+    goodsArray = data.goods;
+
+    goodsArray.forEach((item, index) => {
+      return (item.NumberId = index + 1);
+    });
+
+    initTable();
+  });
 
 function addGoods(obj, uniqueId) {
-  obj.order = uniqueId;
+  obj.id = uniqueId;
 
   const maxOrder = goodsArray.reduce(
-    (max, item) => (item.id > max ? item.id : max),
+    (max, item) => (item.NumberId > max ? item.NumberId : max),
     0
   );
-  obj.id = maxOrder + 1;
+  obj.NumberId = maxOrder + 1;
 
   console.log(obj);
   goodsArray.push(obj);
 }
 
 function removeGoodsById(id) {
-  goodsArray = goodsArray.filter((el) => el.id !== id);
+  goodsArray = goodsArray.filter((el) => el.NumberId !== id);
 
   goodsArray.forEach((item, index) => {
-    return (item.id = index + 1);
+    return (item.NumberId = index + 1);
   });
 
   console.log("goodsArray2: ", goodsArray);
 
   initTable();
 }
-// window.addEventListener("click", () => {
-//   console.log("goodsArray:Click ", goodsArray);
-// });
 
 function calculateTotalPrice() {
   return goodsArray.reduce((acc, obj) => {
@@ -98,4 +83,44 @@ function calculateTotalPrice() {
   }, 0);
 }
 
-export { goodsArray, addGoods, removeGoodsById, calculateTotalPrice };
+export {
+  goodsArray,
+  addGoods,
+  removeGoodsById,
+  calculateTotalPrice,
+  returnArray,
+};
+
+//!
+window.addEventListener("click", () => {
+  console.log("goodsArray:Click ", goodsArray);
+});
+console.log("module");
+
+//*Search
+const input = document.querySelector(".panel__input");
+let id;
+input.addEventListener("input", ({ target }) => {
+  clearTimeout(id);
+
+  id = setTimeout(async () => {
+    const value = target.value;
+    console.log("value: ", value);
+    fetch(`https://elegant-proud-car.glitch.me/api/goods/${value}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("http error: " + res.status);
+        } else {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        if (data === undefined) {
+          console.log("false");
+        } else {
+          goodsArray = [data];
+          initTable();
+        }
+      });
+  }, 300);
+});

@@ -1,6 +1,6 @@
 // modal.js
 
-import { addGoods, goodsArray } from "./data.js";
+import { addGoods } from "./data.js";
 import { initTable, cmsTotalPrce } from "./table.js";
 
 import {
@@ -38,6 +38,20 @@ function formControl() {
     e.preventDefault();
     const formData = new FormData(form);
     const obj = Object.fromEntries(formData);
+    fetch("https://elegant-proud-car.glitch.me/api", {
+      method: "POST",
+      body: JSON.stringify(obj),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        alert("goods", response);
+      })
+      .catch((err) => {
+        alert(`Ошибка ${err.message}`);
+      });
     addGoods(obj, uniqueId);
     initTable(); // Перерисовать таблицу после добавления товара
     cmsTotalPrce();
