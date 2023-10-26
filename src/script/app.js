@@ -1,4 +1,5 @@
 // app.js
+import "../css/index.css";
 
 //* экспорт через (export {initTable, cmsTotalPrce} )
 import { initTable, cmsTotalPrce } from "./module/table.js";
