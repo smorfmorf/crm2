@@ -45,6 +45,7 @@ function formControl() {
     })
       .then((response) => {
         if (!response.ok) {
+          //генерировать ошибку, которая будет передана в catch()
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         alert("goods", response);
