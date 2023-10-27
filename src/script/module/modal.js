@@ -38,7 +38,7 @@ function formControl() {
     e.preventDefault();
     const formData = new FormData(form);
     const obj = Object.fromEntries(formData);
-    fetch("https://elegant-proud-car.glitch.me/api", {
+    fetch("https://elegant-proud-car.glitch.me/api/goods", {
       method: "POST",
       body: JSON.stringify(obj),
       headers: { "Content-Type": "application/json" },
