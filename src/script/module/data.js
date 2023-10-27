@@ -94,15 +94,21 @@ input.addEventListener("input", ({ target }) => {
     fetch(`https://elegant-proud-car.glitch.me/api/goods/${value}`)
       .then((res) => {
         if (!res.ok) {
-          throw new Error("http error: " + res.status);
+          throw new Error("http error_search: " + res.status);
         }
         return res.json();
       })
       .then((data) => {
-        if (data === undefined) {
-          console.log("false");
-        } else {
-          goodsArray = [data];
+        goodsArray = [data];
+        goodsArray.forEach((item, index) => {
+          return (item.NumberId = index + 1);
+        });
+        initTable();
+        if (!input.value) {
+          goodsArray = data.goods;
+          goodsArray.forEach((item, index) => {
+            return (item.NumberId = index + 1);
+          });
           initTable();
         }
       })
