@@ -17,21 +17,6 @@ import { initTable } from "./table.js";
 //       big: "img/smrtxiaomi11t-b.jpg",
 //     },
 //   },
-//   {
-//     id: 2,
-//     title: "Радиоуправляемый автомобиль Cheetan",
-//     price: 4000,
-//     description:
-//       "Внедорожник на дистанционном управлении. Скорость 25км/ч. Возраст 7 - 14 лет",
-//     category: "toys",
-//     discont: 5,
-//     count: 1,
-//     units: "шт",
-//     images: {
-//       small: "img/cheetancar-m.jpg",
-//       big: "img/cheetancar-b.jpg",
-//     },
-//   },
 // ];
 
 let goodsArray = [];
@@ -120,6 +105,9 @@ input.addEventListener("input", ({ target }) => {
           goodsArray = [data];
           initTable();
         }
+      })
+      .catch((error) => {
+        console.log("error: " + error);
       });
   }, 300);
 });

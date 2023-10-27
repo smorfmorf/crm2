@@ -1,6 +1,9 @@
 // app.js
 import "../css/index.css";
 
+import "./module/datalist.js";
+import "./module/loadImage.js";
+
 //* экспорт через (export {initTable, cmsTotalPrce} )
 import { initTable, cmsTotalPrce } from "./module/table.js";
 
@@ -17,3 +20,5 @@ export const CMS = {
     formControl();
   },
 };
+
+CMS.init();
