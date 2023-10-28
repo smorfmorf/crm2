@@ -41,10 +41,10 @@
 
     <!-- <script src="./script/index.js" defer></script> -->
     <script type="module">
-      import { CMS } from "./script/app.js";
-      document.addEventListener("DOMContentLoaded", () => {
-        CMS.init();
-      });
+      // import { CMS } from "./script/app.js";
+      // document.addEventListener("DOMContentLoaded", () => {
+      //   CMS.init();
+      // });
     </script>
 
     <script type="module" src="./script/module/datalist.js"></script>
@@ -219,13 +219,9 @@
             <div class="modal__label modal__label_discount">
               <label class="modal__text" for="discount">Дисконт</label>
               <div class="modal__checkbox-wrapper">
+                <input class="modal__checkbox" type="checkbox" id="discount" />
                 <input
-                  class="modal__checkbox"
-                  type="checkbox"
                   name="discount"
-                  id="discount"
-                />
-                <input
                   class="modal__input modal__input_discount"
                   type="text"
                   name="discount_count"

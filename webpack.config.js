@@ -7,13 +7,19 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const target = mode === "development" ? "web" : "browserslist";
 const devtool = mode === "development" ? "source-map" : undefined;
 
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+
 module.exports = {
   mode,
   target,
   devtool,
   //пересборка при изменении чего-либо в проекте
   devServer: {
+    static: {
+      directory: path.join(__dirname, "img"),
+    },
     hot: true,
+    port: 8081,
   },
 
   //точка входа
@@ -35,6 +41,16 @@ module.exports = {
     }),
 
     new MiniCssExtractPlugin({ filename: "[name][contenthash].css" }),
+
+    // Добавляем конфигурацию CopyWebpackPlugin
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: "src/img", // папка с изображениями
+          to: "assets", // папка назначения (внутри output.path)
+        },
+      ],
+    }),
   ],
   module: {
     rules: [

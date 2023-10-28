@@ -12,10 +12,13 @@ import {
   form,
   count,
   price,
+  discount,
+  fieldNearCheckbox,
 } from "./Elements.js";
 
 btn.addEventListener("click", () => {
   overlay.classList.add("active");
+  form.reset();
 });
 
 overlay.addEventListener("click", (event) => {
@@ -38,7 +41,7 @@ function formControl() {
     e.preventDefault();
     const formData = new FormData(form);
     const obj = Object.fromEntries(formData);
-    fetch("https://elegant-proud-car.glitch.me/api/goods", {
+    fetch("http://localhost:3000/api/goods", {
       method: "POST",
       body: JSON.stringify(obj),
       headers: { "Content-Type": "application/json" },
@@ -73,12 +76,24 @@ function formControl() {
     updateTotalPrice(); // Вызываем функцию обновления цены
   });
 
+  discount.addEventListener("change", () => {
+    updateTotalPrice();
+  });
+
+  fieldNearCheckbox.addEventListener("input", () => {
+    updateTotalPrice();
+  });
+
   function updateTotalPrice() {
     const newPrice = parseFloat(price.value);
     const newCount = parseFloat(count.value);
 
+    const skidka = discount.checked ? fieldNearCheckbox.value : "0";
+    fieldNearCheckbox.value = discount.checked ? fieldNearCheckbox.value : "";
+
+    console.log("skidka: ", skidka);
     if (!isNaN(newPrice) && !isNaN(newCount)) {
-      const totalPrice = newPrice * newCount;
+      const totalPrice = newPrice * newCount - skidka;
       modal__totalPrice.textContent = totalPrice + "$";
     }
   }

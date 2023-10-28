@@ -1,6 +1,6 @@
 //data.js
 import { initTable } from "./table.js";
-
+import { discount } from "./Elements.js";
 // let goodsArray = [
 //   {
 //     id: 1,
@@ -22,20 +22,19 @@ import { initTable } from "./table.js";
 let goodsArray = [];
 
 function returnArray() {
-  return goodsArray;
-}
+  fetch("http://localhost:3000/api/goods")
+    .then((res) => res.json())
+    .then((data) => {
+      goodsArray = data.goods;
 
-fetch("https://elegant-proud-car.glitch.me/api/goods")
-  .then((res) => res.json())
-  .then((data) => {
-    goodsArray = data.goods;
+      goodsArray.forEach((item, index) => {
+        return (item.NumberId = index + 1);
+      });
 
-    goodsArray.forEach((item, index) => {
-      return (item.NumberId = index + 1);
+      initTable();
     });
-
-    initTable();
-  });
+}
+returnArray();
 
 function addGoods(obj, uniqueId) {
   obj.id = uniqueId;
@@ -64,17 +63,11 @@ function removeGoodsById(id) {
 
 function calculateTotalPrice() {
   return goodsArray.reduce((acc, obj) => {
-    return acc + obj.price * obj.count;
+    return acc + obj.price * obj.count - obj.discount;
   }, 0);
 }
 
-export {
-  goodsArray,
-  addGoods,
-  removeGoodsById,
-  calculateTotalPrice,
-  returnArray,
-};
+export { goodsArray, addGoods, removeGoodsById, calculateTotalPrice };
 
 //!
 window.addEventListener("click", () => {
@@ -88,32 +81,45 @@ let id;
 input.addEventListener("input", ({ target }) => {
   clearTimeout(id);
 
-  id = setTimeout(async () => {
+  id = setTimeout(() => {
     const value = target.value;
     console.log("value: ", value);
-    fetch(`https://elegant-proud-car.glitch.me/api/goods/${value}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("http error_search: " + res.status);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        goodsArray = [data];
-        goodsArray.forEach((item, index) => {
-          return (item.NumberId = index + 1);
-        });
-        initTable();
-        if (!input.value) {
-          goodsArray = data.goods;
-          goodsArray.forEach((item, index) => {
-            return (item.NumberId = index + 1);
-          });
-          initTable();
-        }
-      })
-      .catch((error) => {
-        console.log("error: " + error);
+
+    if (value) {
+      goodsArray = goodsArray.filter((good) => good.title.includes(value));
+      goodsArray.forEach((item, index) => {
+        return (item.NumberId = index + 1);
       });
+      console.log("goodsArray: ", goodsArray);
+      initTable();
+    } else {
+      returnArray();
+    }
+
+    // fetch(`http://localhost:3000/api/goods/${value}`)
+    //   .then((res) => {
+    //     if (!res.ok) {
+    //       throw new Error("http error_search: " + res.status);
+    //     }
+    //     return res.json();
+    //   })
+    //   .then((data) => {
+    //     goodsArray = [data];
+    //     goodsArray.forEach((item, index) => {
+    //       return (item.NumberId = index + 1);
+    //     });
+
+    //     initTable();
+    //     if (!input.value) {
+    //       goodsArray = data.goods;
+    //       goodsArray.forEach((item, index) => {
+    //         return (item.NumberId = index + 1);
+    //       });
+    //       initTable();
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("error: " + error);
+    //   });
   }, 300);
 });

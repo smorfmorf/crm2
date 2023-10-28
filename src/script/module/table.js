@@ -1,6 +1,13 @@
 // table.js
 import { goodsArray, removeGoodsById, calculateTotalPrice } from "./data.js";
-import { tableBody, cms, cms__totalPrice, overlay } from "./Elements.js";
+import {
+  tableBody,
+  cms,
+  cms__totalPrice,
+  overlay,
+  discount,
+  fieldNearCheckbox,
+} from "./Elements.js";
 
 function createRow(obj) {
   const row = `     <tr>
@@ -16,10 +23,10 @@ function createRow(obj) {
     <td class="table__cell table__cell_left">${obj.category}</td>
     <td class="table__cell">${obj.units}</td>
     <td class="table__cell">${obj.count}</td>
-    <td class="table__cell">${obj.price}</td>
-    <td class="table__cell">${obj.count * obj.price}</td>
+    <td class="table__cell">${obj.price - obj.discount}</td>
+    <td class="table__cell">${obj.count * obj.price - obj.discount}</td>
     <td class="table__cell table__cell_btn-wrapper">
-      <button class="table__btn table__btn_pic" data-pic="../../img/forest.jpg"></button>
+      <button class="table__btn table__btn_pic" data-pic="${obj.id}"></button>
       <button class="table__btn table__btn_edit"></button>
       <button class="table__btn table__btn_del"></button>
     </td>
@@ -30,6 +37,10 @@ function createRow(obj) {
 
 function changeOverlay(item) {
   overlay.classList.add("active");
+  const formid = document.querySelector(".vendor-code__id");
+  formid.textContent = item.id;
+  const formPrice = document.querySelector(".modal__total-price");
+  formPrice.textContent = item.price * item.count - item.discount + "$";
 
   const form = document.querySelector(".modal__form");
   const close = form.querySelector(".modal__submit");
@@ -50,6 +61,10 @@ function changeOverlay(item) {
   const priceInput = form.querySelector("#price");
   priceInput.value = item.price;
 
+  discount.checked = item.discount;
+  fieldNearCheckbox.disabled = item.discount ? false : true;
+  fieldNearCheckbox.value = item.discount ? item.discount : "";
+
   const footer = document.querySelector(".modal__footer");
   const div = document.createElement("div");
   div.textContent = "Изменить";
@@ -63,6 +78,15 @@ function changeOverlay(item) {
     item.units = form.units.value;
     item.count = form.count.value;
     item.price = form.price.value;
+    item.discount = form.discount.value;
+
+    fetch(`http://localhost:3000/api/goods/${item.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(item),
+    });
 
     renderGoodsTable();
     form.reset();
@@ -94,17 +118,18 @@ function renderGoodsTable() {
 //*Открываем новое окно с картинкой
 function openImageInNewWindow(event) {
   const target = event.target;
-  const imageUrl = target.getAttribute("data-pic");
+  const imageId = target.getAttribute("data-pic");
 
-  if (imageUrl) {
+  const imgString = `/assets/${imageId}.jpg`;
+
+  if (imgString) {
     const windowHeight = 600; // Высота окна
     const windowWidth = 800; // Ширина окна
     const top = (screen.height - windowHeight) / 2;
     const left = (screen.width - windowWidth) / 2;
-
     // Открываем новое окно браузера
     window.open(
-      imageUrl,
+      imgString,
       "_blank",
       `width=${windowWidth}, height=${windowHeight}, top=${top}, left=${left}`
     );
