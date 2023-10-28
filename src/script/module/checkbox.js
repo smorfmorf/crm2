@@ -1,12 +1,12 @@
 // checkbox.js
-import { checkbox, fieldNearCheckbox, discount } from "./Elements.js";
+import { checkbox, inputDiscount, discount } from "./Elements.js";
 
 checkbox.addEventListener("change", () => {
   if (checkbox.checked) {
-    fieldNearCheckbox.disabled = false;
-    fieldNearCheckbox.value = discount.value;
+    inputDiscount.disabled = false;
+    inputDiscount.value = discount.value;
   } else {
-    fieldNearCheckbox.value = "";
-    fieldNearCheckbox.disabled = true;
+    inputDiscount.value = "";
+    inputDiscount.disabled = true;
   }
 });

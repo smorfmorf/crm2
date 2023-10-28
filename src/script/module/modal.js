@@ -13,7 +13,7 @@ import {
   count,
   price,
   discount,
-  fieldNearCheckbox,
+  inputDiscount,
 } from "./Elements.js";
 
 btn.addEventListener("click", () => {
@@ -80,7 +80,7 @@ function formControl() {
     updateTotalPrice();
   });
 
-  fieldNearCheckbox.addEventListener("input", () => {
+  inputDiscount.addEventListener("input", () => {
     updateTotalPrice();
   });
 
@@ -88,8 +88,8 @@ function formControl() {
     const newPrice = parseFloat(price.value);
     const newCount = parseFloat(count.value);
 
-    const skidka = discount.checked ? fieldNearCheckbox.value : "0";
-    fieldNearCheckbox.value = discount.checked ? fieldNearCheckbox.value : "";
+    const skidka = discount.checked ? inputDiscount.value : "0";
+    inputDiscount.value = discount.checked ? inputDiscount.value : "";
 
     console.log("skidka: ", skidka);
     if (!isNaN(newPrice) && !isNaN(newCount)) {

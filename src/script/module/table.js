@@ -6,7 +6,7 @@ import {
   cms__totalPrice,
   overlay,
   discount,
-  fieldNearCheckbox,
+  inputDiscount,
 } from "./Elements.js";
 
 function createRow(obj) {
@@ -62,8 +62,8 @@ function changeOverlay(item) {
   priceInput.value = item.price;
 
   discount.checked = item.discount;
-  fieldNearCheckbox.disabled = item.discount ? false : true;
-  fieldNearCheckbox.value = item.discount ? item.discount : "";
+  inputDiscount.disabled = item.discount ? false : true;
+  inputDiscount.value = item.discount ? item.discount : "";
 
   const footer = document.querySelector(".modal__footer");
   const div = document.createElement("div");

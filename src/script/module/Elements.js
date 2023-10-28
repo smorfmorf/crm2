@@ -1,6 +1,6 @@
 //chekbox
 const checkbox = document.querySelector(".modal__checkbox");
-const fieldNearCheckbox = document.querySelector(".modal__input_discount");
+const inputDiscount = document.querySelector(".modal__input_discount");
 
 //modal
 const overlay = document.querySelector(".overlay");
@@ -20,7 +20,7 @@ const cms__totalPrice = document.querySelector(".cms__total-price");
 
 export {
   checkbox,
-  fieldNearCheckbox,
+  inputDiscount,
   overlay,
   btn,
   form_id,
