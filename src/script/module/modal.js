@@ -1,7 +1,7 @@
 // modal.js
 
 import { addGoods } from "./data.js";
-import { initTable, cmsTotalPrce } from "./table.js";
+import { initTable, cmsTotalPrce, addItemRender } from "./table.js";
 
 import {
   overlay,
@@ -52,12 +52,14 @@ function formControl() {
         }
 
         alert("goods", response);
+        return response.json();
       })
+      .then((data) => addItemRender(data, uniqueId))
       .catch((err) => {
         alert(`Ошибка ${err.message}`);
       });
     addGoods(obj, uniqueId);
-    initTable(); // Перерисовать таблицу после добавления товара
+    // initTable(); // Перерисовать таблицу после добавления товара
     cmsTotalPrce();
     form.reset();
     modal__totalPrice.textContent = 0;

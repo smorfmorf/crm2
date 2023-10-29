@@ -25,6 +25,7 @@ function returnArray() {
   fetch("http://localhost:3000/api/goods")
     .then((res) => res.json())
     .then((data) => {
+      console.log("data: ", data);
       goodsArray = data.goods;
 
       goodsArray.forEach((item, index) => {
@@ -34,6 +35,7 @@ function returnArray() {
       initTable();
     });
 }
+
 returnArray();
 
 function addGoods(obj, uniqueId) {
@@ -122,4 +124,51 @@ input.addEventListener("input", ({ target }) => {
     //     console.log("error: " + error);
     //   });
   }, 300);
+});
+
+let idValue = 0;
+const next = document.querySelector("#next");
+const prev = document.querySelector("#prev");
+let page;
+
+next.addEventListener("click", () => {
+  idValue++;
+  if (idValue === page + 1) {
+    idValue--;
+  }
+  fetch(`http://localhost:3000/api/goods?page=${idValue}`)
+    .then((res) => res.json())
+    .then((data) => {
+      page = data.pages;
+
+      console.log("data: ", data);
+      goodsArray = data.goods;
+
+      goodsArray.forEach((item, index) => {
+        return (item.NumberId = index + 1);
+      });
+
+      initTable();
+    });
+});
+
+prev.addEventListener("click", () => {
+  idValue--;
+  console.log("idValue:1 ", idValue);
+  if (idValue === -1 || idValue === 0) {
+    idValue = 1;
+  }
+  console.log("idValue:2 ", idValue);
+  fetch(`http://localhost:3000/api/goods?page=${idValue}`)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("data: ", data);
+      goodsArray = data.goods;
+
+      goodsArray.forEach((item, index) => {
+        return (item.NumberId = index + 1);
+      });
+
+      initTable();
+    });
 });

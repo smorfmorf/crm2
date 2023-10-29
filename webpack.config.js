@@ -19,7 +19,7 @@ module.exports = {
       directory: path.join(__dirname, "img"),
     },
     hot: true,
-    port: 8081,
+    port: 8080,
   },
 
   //точка входа

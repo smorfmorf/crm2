@@ -111,6 +111,30 @@ function renderGoodsTable() {
 
     tableBody.append(tempDiv);
   });
+  cmsTotalPrce();
+}
+
+function addItemRender(obj, uniqueId) {
+  console.log("obj: ", obj);
+  obj.id = uniqueId;
+  const maxOrder = goodsArray.reduce(
+    (max, item) => (item.NumberId > max ? item.NumberId : max),
+    0
+  );
+  obj.NumberId = maxOrder;
+  console.log(obj);
+  goodsArray.push(obj);
+
+  const rowHTML = createRow(obj);
+  const tempDiv = document.createElement("tr");
+  tempDiv.innerHTML = rowHTML;
+
+  const btn = tempDiv.querySelector(".table__btn_edit");
+  btn.addEventListener("click", () => {
+    changeOverlay(obj);
+  });
+
+  tableBody.append(tempDiv);
 
   cmsTotalPrce();
 }
@@ -120,7 +144,9 @@ function openImageInNewWindow(event) {
   const target = event.target;
   const imageId = target.getAttribute("data-pic");
 
-  const imgString = `/assets/${imageId}.jpg`;
+  // const imgString = `/assets/${imageId}.jpg`;
+
+  const imgString = `http://localhost:3000/image/${imageId}.jpg`;
 
   if (imgString) {
     const windowHeight = 600; // Высота окна
@@ -169,4 +195,4 @@ function cmsTotalPrce() {
   cms__totalPrice.textContent = calculateTotalPrice();
 }
 
-export { initTable, cmsTotalPrce };
+export { initTable, cmsTotalPrce, addItemRender };
