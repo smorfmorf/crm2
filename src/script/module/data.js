@@ -126,6 +126,10 @@ input.addEventListener("input", ({ target }) => {
   }, 300);
 });
 
+const pageNumber = document.querySelector(".sub-panel__choice-pages");
+
+pageNumber.textContent = "Показывать на странице: 1";
+
 let idValue = 0;
 const next = document.querySelector("#next");
 const prev = document.querySelector("#prev");
@@ -136,6 +140,7 @@ next.addEventListener("click", () => {
   if (idValue === page + 1) {
     idValue--;
   }
+  pageNumber.textContent = `Показывать на странице: ${idValue}`;
   fetch(`http://localhost:3000/api/goods?page=${idValue}`)
     .then((res) => res.json())
     .then((data) => {
@@ -154,11 +159,11 @@ next.addEventListener("click", () => {
 
 prev.addEventListener("click", () => {
   idValue--;
-  console.log("idValue:1 ", idValue);
   if (idValue === -1 || idValue === 0) {
     idValue = 1;
   }
-  console.log("idValue:2 ", idValue);
+  pageNumber.textContent = `Показывать на странице: ${idValue}`;
+
   fetch(`http://localhost:3000/api/goods?page=${idValue}`)
     .then((res) => res.json())
     .then((data) => {

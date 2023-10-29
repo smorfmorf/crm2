@@ -12,9 +12,9 @@ import {
 function createRow(obj) {
   const row = `     <tr>
     <td class="table__cell">${obj.NumberId}</td>
-    <td class="table__cell table__cell_left table__cell_name" data-id="${
-      obj.NumberId
-    }">
+    <td class="table__cell table__cell_left table__cell_name" data-value=${
+      obj.id
+    } data-id="${obj.NumberId}">
       <span class="table__cell-id">id: ${
         obj.order === undefined ? obj.id : obj.order
       }</span>
@@ -181,6 +181,7 @@ function DeleteItem(event) {
     const tr = target.closest("tr");
     const data = tr.querySelector(".table__cell_name");
     const id = parseInt(data.dataset.id);
+    const value = parseInt(data.dataset.value);
     console.log("id: ", id);
     //удаляем из массива объектов данные товара
     removeGoodsById(id);
@@ -188,6 +189,8 @@ function DeleteItem(event) {
     tr.remove();
     //пересчитываем сумму товаров в таблице
     cmsTotalPrce();
+
+    fetch(`http://localhost:3000/api/goods/${value}`, { method: "DELETE" });
   }
 }
 
