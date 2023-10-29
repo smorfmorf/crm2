@@ -1,6 +1,5 @@
 //data.js
 import { initTable } from "./table.js";
-import { discount } from "./Elements.js";
 // let goodsArray = [
 //   {
 //     id: 1,
@@ -65,7 +64,7 @@ function removeGoodsById(id) {
 
 function calculateTotalPrice() {
   return goodsArray.reduce((acc, obj) => {
-    return acc + obj.price * obj.count - obj.discount;
+    return acc + obj.price * obj.count * (1 - obj.discount / 100);
   }, 0);
 }
 

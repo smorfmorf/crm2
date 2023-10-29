@@ -95,7 +95,7 @@ function formControl() {
 
     console.log("skidka: ", skidka);
     if (!isNaN(newPrice) && !isNaN(newCount)) {
-      const totalPrice = newPrice * newCount - skidka;
+      const totalPrice = newPrice * newCount * (1 - skidka / 100);
       modal__totalPrice.textContent = totalPrice + "$";
     }
   }

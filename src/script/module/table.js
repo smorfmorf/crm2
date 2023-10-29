@@ -24,7 +24,9 @@ function createRow(obj) {
     <td class="table__cell">${obj.units}</td>
     <td class="table__cell">${obj.count}</td>
     <td class="table__cell">${obj.price - obj.discount}</td>
-    <td class="table__cell">${obj.count * obj.price - obj.discount}</td>
+    <td class="table__cell">${
+      obj.count * obj.price * (1 - obj.discount / 100)
+    }</td>
     <td class="table__cell table__cell_btn-wrapper">
       <button class="table__btn table__btn_pic" data-pic="${obj.id}"></button>
       <button class="table__btn table__btn_edit"></button>
@@ -40,7 +42,8 @@ function changeOverlay(item) {
   const formid = document.querySelector(".vendor-code__id");
   formid.textContent = item.id;
   const formPrice = document.querySelector(".modal__total-price");
-  formPrice.textContent = item.price * item.count - item.discount + "$";
+  formPrice.textContent =
+    item.price * item.count * (1 - item.discount / 100) + "$";
 
   const form = document.querySelector(".modal__form");
   const close = form.querySelector(".modal__submit");
@@ -54,7 +57,7 @@ function changeOverlay(item) {
   descriptionTextarea.value = item.description;
   const unitsInput = form.querySelector("#units");
   unitsInput.value = item.units;
-  const discountInput = form.querySelector("#discount");
+  const discountInput = form.querySelector("#discount_input");
   discountInput.value = item.discount;
   const countInput = form.querySelector("#count");
   countInput.value = item.count;

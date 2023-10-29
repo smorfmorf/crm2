@@ -11,7 +11,7 @@ const modal__totalPrice = document.querySelector(".modal__total-price");
 const form = document.querySelector(".modal__form");
 const count = document.getElementById("count");
 const price = document.getElementById("price");
-const discount = document.getElementById("discount");
+const discount = document.getElementById("discount_input");
 
 //table
 const tableBody = document.querySelector(".table__body");
