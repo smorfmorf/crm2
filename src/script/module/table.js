@@ -23,7 +23,7 @@ function createRow(obj) {
     <td class="table__cell table__cell_left">${obj.category}</td>
     <td class="table__cell">${obj.units}</td>
     <td class="table__cell">${obj.count}</td>
-    <td class="table__cell">${obj.price - obj.discount}</td>
+    <td class="table__cell">${obj.price * (1 - obj.discount / 100)}</td>
     <td class="table__cell">${
       obj.count * obj.price * (1 - obj.discount / 100)
     }</td>
