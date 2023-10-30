@@ -58,13 +58,28 @@ function addGoods(obj, uniqueId) {
 }
 
 function removeGoodsById(id) {
-  goodsArray = goodsArray.filter((el) => el.NumberId !== id);
+  // goodsArray = goodsArray.filter((el) => el.NumberId !== id);
+  const indexToRemove = goodsArray.findIndex((el) => el.NumberId === id);
 
-  goodsArray.forEach((item, index) => {
-    return (item.NumberId = index + 1);
-  });
+  if (indexToRemove !== -1) {
+    goodsArray.splice(indexToRemove, 1);
 
-  console.log("goodsArray2: ", goodsArray);
+    // Обновляем номера элементов
+    for (let i = indexToRemove; i < goodsArray.length; i++) {
+      goodsArray[i].NumberId--;
+    }
+  }
+
+  // goodsArray.forEach((item, index) => {
+  //   return (item.NumberId = index + 1);
+  // });
+
+  // coutID = 10 * coutID + 1;
+  // if (coutID === 0) coutID = 1;
+
+  // goodsArray.forEach((item, index) => {
+  //   return (item.NumberId = index + coutID);
+  // });
 
   initTable();
 }
