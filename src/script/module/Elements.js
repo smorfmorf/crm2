@@ -13,6 +13,13 @@ const count = document.getElementById("count");
 const price = document.getElementById("price");
 const discount = document.getElementById("discount_input");
 
+//image
+const imageConainer = document.querySelector(".image_upload");
+
+//pages
+const sub_pages = document.querySelector(".sub-panel__pages");
+const sub_choice_pages = document.querySelector(".sub-panel__choice-pages");
+
 //table
 const tableBody = document.querySelector(".table__body");
 const cms = document.querySelector(".table__body");
@@ -33,4 +40,7 @@ export {
   cms,
   cms__totalPrice,
   discount,
+  imageConainer,
+  sub_pages,
+  sub_choice_pages,
 };

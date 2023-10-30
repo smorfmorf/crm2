@@ -1,7 +1,7 @@
 // modal.js
 
 import { addGoods } from "./data.js";
-import { initTable, cmsTotalPrce, addItemRender } from "./table.js";
+import { cmsTotalPrce, addItemRender } from "./table.js";
 
 import {
   overlay,
@@ -36,11 +36,27 @@ overlay_modal_button.addEventListener("click", () => {
   form_id.textContent = uniqueId;
 });
 
+function base64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader(file);
+    reader.addEventListener("loadend", () => {
+      resolve(reader.result);
+    });
+    reader.addEventListener("error", (err) => {
+      reject(err);
+    });
+
+    reader.readAsDataURL(file);
+  });
+}
+
 function formControl() {
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
     const obj = Object.fromEntries(formData);
+    obj.image = await base64(obj.image);
+    console.log("obj: ", obj.image);
     fetch("http://localhost:3000/api/goods", {
       method: "POST",
       body: JSON.stringify(obj),
@@ -93,9 +109,9 @@ function formControl() {
     const skidka = discount.checked ? inputDiscount.value : "0";
     inputDiscount.value = discount.checked ? inputDiscount.value : "";
 
-    console.log("skidka: ", skidka);
+    // console.log("skidka: ", skidka);
     if (!isNaN(newPrice) && !isNaN(newCount)) {
-      const totalPrice = newPrice * newCount * (1 - skidka / 100);
+      const totalPrice = (newPrice * newCount * (1 - skidka / 100)).toFixed();
       modal__totalPrice.textContent = totalPrice + "$";
     }
   }

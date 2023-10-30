@@ -1,5 +1,5 @@
 // table.js
-import { goodsArray, removeGoodsById, calculateTotalPrice } from "./data.js";
+import { goodsArray, removeGoodsById } from "./data.js";
 import {
   tableBody,
   cms,
@@ -7,6 +7,7 @@ import {
   overlay,
   discount,
   inputDiscount,
+  imageConainer,
 } from "./Elements.js";
 
 function createRow(obj) {
@@ -23,10 +24,18 @@ function createRow(obj) {
     <td class="table__cell table__cell_left">${obj.category}</td>
     <td class="table__cell">${obj.units}</td>
     <td class="table__cell">${obj.count}</td>
-    <td class="table__cell">${obj.price * (1 - obj.discount / 100)}</td>
-    <td class="table__cell">${
-      obj.count * obj.price * (1 - obj.discount / 100)
-    }</td>
+
+    <td class="table__cell">${(
+      obj.price *
+      (1 - obj.discount / 100)
+    ).toFixed()}</td>
+
+    <td class="table__cell">${(
+      obj.count *
+      obj.price *
+      (1 - obj.discount / 100)
+    ).toFixed()}</td>
+
     <td class="table__cell table__cell_btn-wrapper">
       <button class="table__btn table__btn_pic" data-pic="${obj.id}"></button>
       <button class="table__btn table__btn_edit"></button>
@@ -43,7 +52,7 @@ function changeOverlay(item) {
   formid.textContent = item.id;
   const formPrice = document.querySelector(".modal__total-price");
   formPrice.textContent =
-    item.price * item.count * (1 - item.discount / 100) + "$";
+    (item.price * item.count * (1 - item.discount / 100)).toFixed() + "$";
 
   const form = document.querySelector(".modal__form");
   const close = form.querySelector(".modal__submit");
@@ -63,6 +72,15 @@ function changeOverlay(item) {
   countInput.value = item.count;
   const priceInput = form.querySelector("#price");
   priceInput.value = item.price;
+
+  const img = new Image();
+  img.src = `http://localhost:3000/${item.image}`;
+  imageConainer.innerHTML = "";
+  imageConainer.append(img);
+
+  if (img.src === "http://localhost:3000/image/notimage.jpg") {
+    imageConainer.textContent = "изобраение не найдено";
+  }
 
   discount.checked = item.discount;
   inputDiscount.disabled = item.discount ? false : true;
@@ -147,9 +165,10 @@ function openImageInNewWindow(event) {
   const target = event.target;
   const imageId = target.getAttribute("data-pic");
 
+  const item = goodsArray.find((item) => item.id === imageId);
   // const imgString = `/assets/${imageId}.jpg`;
 
-  const imgString = `http://localhost:3000/image/${imageId}.jpg`;
+  const imgString = `http://localhost:3000/${item.image}`;
 
   if (imgString) {
     const windowHeight = 600; // Высота окна
@@ -201,7 +220,10 @@ function DeleteItem(event) {
 }
 
 function cmsTotalPrce() {
-  cms__totalPrice.textContent = calculateTotalPrice();
+  fetch("http://localhost:3000/api/total")
+    .then((res) => res.json())
+    .then((data) => (cms__totalPrice.textContent = data));
+  // cms__totalPrice.textContent = calculateTotalPrice().toFixed();
 }
 
 export { initTable, cmsTotalPrce, addItemRender };

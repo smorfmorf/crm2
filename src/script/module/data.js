@@ -1,5 +1,6 @@
 //data.js
 import { initTable } from "./table.js";
+import { sub_pages, sub_choice_pages } from "./Elements.js";
 // let goodsArray = [
 //   {
 //     id: 1,
@@ -19,6 +20,7 @@ import { initTable } from "./table.js";
 // ];
 
 let goodsArray = [];
+let lengthArray;
 
 function returnArray() {
   fetch("http://localhost:3000/api/goods")
@@ -30,6 +32,11 @@ function returnArray() {
       goodsArray.forEach((item, index) => {
         return (item.NumberId = index + 1);
       });
+
+      sub_pages.textContent = `${goodsArray[0].NumberId}-${goodsArray[9].NumberId} из ${data.totalCount}`;
+
+      lengthArray = goodsArray.length;
+      sub_choice_pages.textContent = `Показывать на странице: ${lengthArray}`;
 
       initTable();
     });
@@ -125,33 +132,41 @@ input.addEventListener("input", ({ target }) => {
   }, 300);
 });
 
-const pageNumber = document.querySelector(".sub-panel__choice-pages");
+//при первом рендере
+let idValue = 1;
+let page = 2;
+let coutID = 1;
 
-pageNumber.textContent = "Показывать на странице: 1";
-
-let idValue = 0;
 const next = document.querySelector("#next");
 const prev = document.querySelector("#prev");
-let page;
 
 next.addEventListener("click", () => {
   idValue++;
   if (idValue === page + 1) {
     idValue--;
   }
-  pageNumber.textContent = `Показывать на странице: ${idValue}`;
+  console.log("idValue", idValue);
   fetch(`http://localhost:3000/api/goods?page=${idValue}`)
     .then((res) => res.json())
     .then((data) => {
       page = data.pages;
 
-      console.log("data: ", data);
+      coutID = data.page - 1;
+      console.log("coutID: ", coutID);
+      coutID = 10 * coutID + 1;
+
       goodsArray = data.goods;
 
       goodsArray.forEach((item, index) => {
-        return (item.NumberId = index + 1);
+        return (item.NumberId = index + coutID);
       });
 
+      lengthArray = goodsArray.length;
+      sub_pages.textContent = `${goodsArray[0].NumberId}-${
+        goodsArray[lengthArray - 1].NumberId
+      } из ${data.totalCount}`;
+
+      sub_choice_pages.textContent = `Показывать на странице: ${lengthArray}`;
       initTable();
     });
 });
@@ -161,7 +176,6 @@ prev.addEventListener("click", () => {
   if (idValue === -1 || idValue === 0) {
     idValue = 1;
   }
-  pageNumber.textContent = `Показывать на странице: ${idValue}`;
 
   fetch(`http://localhost:3000/api/goods?page=${idValue}`)
     .then((res) => res.json())
@@ -169,10 +183,21 @@ prev.addEventListener("click", () => {
       console.log("data: ", data);
       goodsArray = data.goods;
 
+      coutID = data.page - 1;
+      console.log("coutID: ", coutID);
+      coutID = 10 * coutID + 1;
+      if (coutID === 0) coutID = 1;
+
       goodsArray.forEach((item, index) => {
-        return (item.NumberId = index + 1);
+        return (item.NumberId = index + coutID);
       });
 
+      lengthArray = goodsArray.length;
+      sub_pages.textContent = `${goodsArray[0].NumberId}-${
+        goodsArray[lengthArray - 1].NumberId
+      } из ${data.totalCount}`;
+
+      sub_choice_pages.textContent = `Показывать на странице: ${lengthArray}`;
       initTable();
     });
 });
