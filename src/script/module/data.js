@@ -32,12 +32,12 @@ function returnArray() {
       goodsArray.forEach((item, index) => {
         return (item.NumberId = index + 1);
       });
-
-      sub_pages.textContent = `${goodsArray[0].NumberId}-${goodsArray[9].NumberId} из ${data.totalCount}`;
+      console.log("goodsArray: ", goodsArray);
 
       lengthArray = goodsArray.length;
-      sub_choice_pages.textContent = `Показывать на странице: ${lengthArray}`;
+      // sub_pages.textContent = `${goodsArray[0].NumberId}-${goodsArray[9].NumberId} из ${data.totalCount}`;
 
+      sub_choice_pages.textContent = `Показывать на странице: ${lengthArray}`;
       initTable();
     });
 }
@@ -149,7 +149,7 @@ input.addEventListener("input", ({ target }) => {
 
 //при первом рендере
 let idValue = 1;
-let page = 2;
+let page = 0;
 let coutID = 1;
 
 const next = document.querySelector("#next");
@@ -165,6 +165,7 @@ next.addEventListener("click", () => {
     .then((res) => res.json())
     .then((data) => {
       page = data.pages;
+      console.log("page: ", page);
 
       coutID = data.page - 1;
       console.log("coutID: ", coutID);
@@ -177,9 +178,9 @@ next.addEventListener("click", () => {
       });
 
       lengthArray = goodsArray.length;
-      sub_pages.textContent = `${goodsArray[0].NumberId}-${
-        goodsArray[lengthArray - 1].NumberId
-      } из ${data.totalCount}`;
+      // sub_pages.textContent = `${goodsArray[0].NumberId}-${
+      //   goodsArray[lengthArray - 1].NumberId
+      // } из ${data.totalCount}`;
 
       sub_choice_pages.textContent = `Показывать на странице: ${lengthArray}`;
       initTable();
@@ -208,9 +209,9 @@ prev.addEventListener("click", () => {
       });
 
       lengthArray = goodsArray.length;
-      sub_pages.textContent = `${goodsArray[0].NumberId}-${
-        goodsArray[lengthArray - 1].NumberId
-      } из ${data.totalCount}`;
+      // sub_pages.textContent = `${goodsArray[0].NumberId}-${
+      //   goodsArray[lengthArray - 1].NumberId
+      // } из ${data.totalCount}`;
 
       sub_choice_pages.textContent = `Показывать на странице: ${lengthArray}`;
       initTable();

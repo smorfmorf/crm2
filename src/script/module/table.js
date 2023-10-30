@@ -1,5 +1,6 @@
 // table.js
-import { goodsArray, removeGoodsById } from "./data.js";
+
+import { goodsArray, removeGoodsById, calculateTotalPrice } from "./data.js";
 import {
   tableBody,
   cms,
@@ -219,11 +220,31 @@ function DeleteItem(event) {
   }
 }
 
+let totalPrice;
 function cmsTotalPrce() {
   fetch("http://localhost:3000/api/total")
     .then((res) => res.json())
-    .then((data) => (cms__totalPrice.textContent = data));
+    .then((data) => {
+      totalPrice = data.toFixed();
+
+      let discountedTotalPrice = 0; // Создаем переменную для общей суммы с учетом скидки
+
+      goodsArray.forEach((item) => {
+        // Рассчитываем стоимость товара с учетом скидки
+        const discountedPrice = totalPrice * (1 - item.discount / 100);
+
+        // Добавляем стоимость товара к общей сумме с учетом скидки
+        discountedTotalPrice += discountedPrice;
+      });
+      cms__totalPrice.textContent = discountedTotalPrice;
+      console.log("Discounted Total Price: ", discountedTotalPrice);
+    });
+
+  // fetch("http://localhost:3000/api/total")
+  //   .then((res) => res.json())
+  //   .then((data) => {
+  //     cms__totalPrice.textContent = data.toFixed();
+  //   });
   // cms__totalPrice.textContent = calculateTotalPrice().toFixed();
 }
-
 export { initTable, cmsTotalPrce, addItemRender };
