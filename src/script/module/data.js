@@ -22,15 +22,24 @@ import { sub_pages, sub_choice_pages } from "./Elements.js";
 let goodsArray = [];
 let lengthArray;
 
+//при первом рендере
+let page = 0; // page idvalue
+let pages = 0; //pages
+
 function returnArray() {
   fetch("http://localhost:3000/api/goods")
     .then((res) => res.json())
     .then((data) => {
+      page = data.page;
+      pages = data.pages;
+
+      console.log("data: ", data);
       goodsArray = data.goods;
       console.log("goodsArray: ", goodsArray);
 
       if (goodsArray && goodsArray.length > 0) {
         goodsArray.forEach((item, index) => {
+          item.price = (item.price * (1 - item.discount / 100)).toFixed();
           item.NumberId = index + 1;
         });
 
@@ -96,9 +105,12 @@ input.addEventListener("input", ({ target }) => {
 
     if (value) {
       goodsArray = goodsArray.filter((good) => good.title.includes(value));
+
       goodsArray.forEach((item, index) => {
-        return (item.NumberId = index + 1);
+        item.price = (item.price * (1 - item.discount / 100)).toFixed();
+        item.NumberId = index + 1;
       });
+
       console.log("goodsArray: ", goodsArray);
       initTable();
     } else {
@@ -133,50 +145,59 @@ input.addEventListener("input", ({ target }) => {
   }, 300);
 });
 
-//при первом рендере
-let idValue = 1;
-let page = 0;
+//!
 let coutID = 1;
-
 const next = document.querySelector("#next");
 const prev = document.querySelector("#prev");
 
 next.addEventListener("click", () => {
-  idValue++;
-  if (idValue === page + 1) {
-    idValue--;
-  }
-  fetch(`http://localhost:3000/api/goods?page=${idValue}`)
-    .then((res) => res.json())
-    .then((data) => {
-      page = data.pages;
+  console.log("page", page);
+  console.log("pages", pages);
 
-      coutID = data.page - 1;
-      coutID = 10 * coutID + 1;
+  page++;
+  if (page <= pages) {
+    fetch(`http://localhost:3000/api/goods?page=${page}`)
+      .then((res) => res.json())
+      .then((data) => {
+        page = data.page;
+        pages = data.pages;
+        console.log("DATA_page: ", page);
+        console.log("DATA_pages: ", pages);
+        console.log("DATA_data: ", data);
 
-      goodsArray = data.goods;
+        coutID = data.page - 1;
+        coutID = 10 * coutID + 1;
 
-      goodsArray.forEach((item, index) => {
-        return (item.NumberId = index + coutID);
+        goodsArray = data.goods;
+
+        goodsArray.forEach((item, index) => {
+          item.price = (item.price * (1 - item.discount / 100)).toFixed();
+          item.NumberId = index + coutID;
+        });
+
+        lengthArray = goodsArray.length;
+        // sub_pages.textContent = `${goodsArray[0].NumberId}-${
+        //   goodsArray[lengthArray - 1].NumberId
+        // } из ${data.totalCount}`;
+
+        sub_choice_pages.textContent = `Показывать на странице: ${lengthArray}`;
+        initTable();
       });
-
-      lengthArray = goodsArray.length;
-      // sub_pages.textContent = `${goodsArray[0].NumberId}-${
-      //   goodsArray[lengthArray - 1].NumberId
-      // } из ${data.totalCount}`;
-
-      sub_choice_pages.textContent = `Показывать на странице: ${lengthArray}`;
-      initTable();
-    });
+  } else {
+    console.log("страница не существует");
+    page--;
+  }
 });
 
 prev.addEventListener("click", () => {
-  idValue--;
-  if (idValue === -1 || idValue === 0) {
-    idValue = 1;
+  page--;
+  console.log("page: ", page);
+  if (page === -1 || page === 0) {
+    page = 1;
+    console.log("page: = 1 ", page);
   }
 
-  fetch(`http://localhost:3000/api/goods?page=${idValue}`)
+  fetch(`http://localhost:3000/api/goods?page=${page}`)
     .then((res) => res.json())
     .then((data) => {
       goodsArray = data.goods;
@@ -186,7 +207,8 @@ prev.addEventListener("click", () => {
       if (coutID === 0) coutID = 1;
 
       goodsArray.forEach((item, index) => {
-        return (item.NumberId = index + coutID);
+        item.price = (item.price * (1 - item.discount / 100)).toFixed();
+        item.NumberId = index + coutID;
       });
 
       lengthArray = goodsArray.length;
