@@ -16,3 +16,9 @@ function calculateTotalPrice() {
     return acc + obj.price * obj.count * (1 - obj.discount / 100);
   }, 0);
 }
+
+const item = "123";
+
+if (!item) {
+  console.log("ok");
+}

@@ -71,6 +71,8 @@ function changeOverlay(item) {
   const priceInput = form.querySelector("#price");
   priceInput.value = item.price;
 
+  console.log("look", item.image);
+
   const img = new Image();
   img.src = `http://localhost:3000/${item.image}`;
   imageConainer.innerHTML = "";
@@ -90,6 +92,18 @@ function changeOverlay(item) {
   div.classList.add("modal__submit");
   footer.append(div);
 
+  const imageInput = document.querySelector(".modal__file");
+  imageInput.addEventListener("change", async () => {
+    const file = imageInput.files[0];
+    console.log("file: ", file);
+
+    if (file) {
+      const formData = new FormData(form);
+      const obj = Object.fromEntries(formData);
+      item.image = await base64(obj.image);
+    }
+  });
+
   div.addEventListener("click", async () => {
     item.title = form.title.value;
     item.category = form.category.value;
@@ -98,10 +112,6 @@ function changeOverlay(item) {
     item.count = form.count.value;
     item.price = form.price.value;
     item.discount = form.discount.value;
-
-    const formData = new FormData(form);
-    const obj = Object.fromEntries(formData);
-    item.image = await base64(obj.image);
 
     fetch(`http://localhost:3000/api/goods/${item.id}`, {
       method: "PATCH",
@@ -113,15 +123,19 @@ function changeOverlay(item) {
       .then((res) => res.json())
       .then((data) => {
         item.image = data.image;
+        console.log("imageChange: ", item.image);
+        console.log("itemChange", item);
+
+        const element = document.querySelector(`[data-pic="${item.id}"]`);
+        element.addEventListener("click", openImageInNewWindow);
       });
 
     renderGoodsTable();
+
     form.reset();
+    imageConainer.innerHTML = "";
     overlay.classList.remove("active");
     cmsTotalPrce();
-
-    const btnPicture = document.querySelector(".table__btn_pic");
-    btnPicture.addEventListener("click", openImageInNewWindow);
   });
 }
 
@@ -170,8 +184,6 @@ function addItemRender(obj, id) {
 
     const btnPicture = tempDiv.querySelector(".table__btn_pic");
     btnPicture.addEventListener("click", openImageInNewWindow);
-
-    cmsTotalPrce();
   } else {
     console.log("ошибка");
   }
@@ -179,12 +191,13 @@ function addItemRender(obj, id) {
 
 //*Открываем новое окно с картинкой
 function openImageInNewWindow(event) {
+  console.log("openImageInNewWindow: ");
   const target = event.target;
   const imageId = target.getAttribute("data-pic");
 
   const item = goodsArray.find((item) => item.id === imageId);
-  console.log("item: ", item);
-  console.log("imageId:imageId ", imageId);
+  console.log("image_OPEN: ", item);
+  console.log("imageId_OPEN ", imageId);
   // const imgString = `/assets/${imageId}.jpg`;
 
   const imgString = `http://localhost:3000/${item.image}`;

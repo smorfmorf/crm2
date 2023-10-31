@@ -1,7 +1,7 @@
 const imagePreview = document.querySelector(".image_upload");
 const imageInput = document.querySelector(".modal__file");
 
-imageInput.addEventListener("change", () => {
+imageInput.addEventListener("change", async () => {
   const file = imageInput.files[0];
 
   //1 mb = 1024 * 1024 bytes
@@ -17,6 +17,8 @@ imageInput.addEventListener("change", () => {
       imagePreview.append(img);
     };
     reader.readAsDataURL(file);
+    //преобразования их в строку base64 с помощью readAsDataURL, reader.result будет содержать строку base64, представляющую содержимое файла
+
     imagePreview.textContent = "";
   }
 });

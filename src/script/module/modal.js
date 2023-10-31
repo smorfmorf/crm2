@@ -14,10 +14,13 @@ import {
   price,
   discount,
   inputDiscount,
+  imageConainer,
 } from "./Elements.js";
 
 btn.addEventListener("click", () => {
   overlay.classList.add("active");
+
+  imageConainer.innerHTML = "";
   form.reset();
 });
 
@@ -56,7 +59,7 @@ function formControl() {
     const formData = new FormData(form);
     const obj = Object.fromEntries(formData);
     obj.image = await base64(obj.image);
-    obj.price = (obj.price * (1 - obj.discount / 100)).toFixed();
+    // obj.price = (obj.price * (1 - obj.discount / 100)).toFixed();
 
     fetch("http://localhost:3000/api/goods", {
       method: "POST",
@@ -73,9 +76,10 @@ function formControl() {
       })
       .then((data) => {
         const id = data.id;
+        obj.image = data.image;
+        console.log("obj.image: ", obj.image);
 
         addItemRender(data, id);
-
         addGoods(obj, id);
       })
       .catch((err) => {
