@@ -31,6 +31,7 @@ function returnArray() {
 
       if (goodsArray && goodsArray.length > 0) {
         goodsArray.forEach((item, index) => {
+          item.price = (item.price * (1 - item.discount / 100)).toFixed();
           item.NumberId = index + 1;
         });
 
