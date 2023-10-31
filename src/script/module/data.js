@@ -1,5 +1,5 @@
 //data.js
-import { initTable, openImage } from "./table.js";
+import { initTable } from "./table.js";
 import { sub_pages, sub_choice_pages } from "./Elements.js";
 // let goodsArray = [
 //   {
@@ -81,8 +81,6 @@ export { goodsArray, addGoods, removeGoodsById };
 //!
 window.addEventListener("click", () => {
   console.log("goodsArray:Click ", goodsArray);
-  // openImage();
-  console.log("goodsArray.length: ", goodsArray.length);
 });
 console.log("module");
 

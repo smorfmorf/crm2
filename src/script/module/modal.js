@@ -56,6 +56,7 @@ function formControl() {
     const formData = new FormData(form);
     const obj = Object.fromEntries(formData);
     obj.image = await base64(obj.image);
+    obj.price = (obj.price * (1 - obj.discount / 100)).toFixed();
 
     fetch("http://localhost:3000/api/goods", {
       method: "POST",
