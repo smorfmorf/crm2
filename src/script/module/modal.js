@@ -56,7 +56,7 @@ function formControl() {
     const formData = new FormData(form);
     const obj = Object.fromEntries(formData);
     obj.image = await base64(obj.image);
-    console.log("obj: ", obj.image);
+
     fetch("http://localhost:3000/api/goods", {
       method: "POST",
       body: JSON.stringify(obj),
@@ -67,21 +67,26 @@ function formControl() {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        alert("goods", response);
+        alert("goods");
         return response.json();
       })
-      .then((data) => addItemRender(data, uniqueId))
+      .then((data) => {
+        const id = data.id;
+
+        addItemRender(data, id);
+
+        addGoods(obj, id);
+      })
       .catch((err) => {
         alert(`Ошибка ${err.message}`);
       });
-    addGoods(obj, uniqueId);
+
     // initTable(); // Перерисовать таблицу после добавления товара
     cmsTotalPrce();
     form.reset();
     modal__totalPrice.textContent = 0;
     overlay.classList.remove("active");
   });
-
   modal__totalPrice.textContent = 0 + "$";
 
   count.addEventListener("input", () => {
@@ -113,6 +118,9 @@ function formControl() {
     if (!isNaN(newPrice) && !isNaN(newCount)) {
       const totalPrice = (newPrice * newCount * (1 - skidka / 100)).toFixed();
       modal__totalPrice.textContent = totalPrice + "$";
+
+      //*test price
+      (price.value * (1 - skidka / 100)).toFixed();
     }
   }
 }

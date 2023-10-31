@@ -26,16 +26,9 @@ function createRow(obj) {
     <td class="table__cell">${obj.units}</td>
     <td class="table__cell">${obj.count}</td>
 
-    <td class="table__cell">${(
-      obj.price *
-      (1 - obj.discount / 100)
-    ).toFixed()}</td>
+    <td class="table__cell">${obj.price}</td>
 
-    <td class="table__cell">${(
-      obj.count *
-      obj.price *
-      (1 - obj.discount / 100)
-    ).toFixed()}</td>
+    <td class="table__cell">${obj.count * obj.price}</td>
 
     <td class="table__cell table__cell_btn-wrapper">
       <button class="table__btn table__btn_pic" data-pic="${obj.id}"></button>
@@ -99,7 +92,7 @@ function changeOverlay(item) {
     item.description = form.description.value;
     item.units = form.units.value;
     item.count = form.count.value;
-    item.price = form.price.value;
+    item.price = form.price.value * (1 - form.discount.value / 100);
     item.discount = form.discount.value;
 
     fetch(`http://localhost:3000/api/goods/${item.id}`, {
@@ -113,6 +106,7 @@ function changeOverlay(item) {
     renderGoodsTable();
     form.reset();
     overlay.classList.remove("active");
+    cmsTotalPrce();
   });
 }
 
@@ -135,30 +129,39 @@ function renderGoodsTable() {
   });
   cmsTotalPrce();
 }
+function addItemRender(obj, id) {
+  obj.id = id;
 
-function addItemRender(obj, uniqueId) {
-  console.log("obj: ", obj);
-  obj.id = uniqueId;
-  const maxOrder = goodsArray.reduce(
-    (max, item) => (item.NumberId > max ? item.NumberId : max),
-    0
-  );
-  obj.NumberId = maxOrder;
-  console.log(obj);
-  goodsArray.push(obj);
+  const tableBody = document.querySelector(".table__body");
+  const maxItemsPerPage = 10; // Максимальное количество записей на странице
 
-  const rowHTML = createRow(obj);
-  const tempDiv = document.createElement("tr");
-  tempDiv.innerHTML = rowHTML;
+  if (tableBody.children.length < maxItemsPerPage) {
+    const maxOrder = goodsArray.reduce(
+      (max, item) => (item.NumberId > max ? item.NumberId : max),
+      0
+    );
+    obj.NumberId = maxOrder + 1;
 
-  const btn = tempDiv.querySelector(".table__btn_edit");
-  btn.addEventListener("click", () => {
-    changeOverlay(obj);
-  });
+    const rowHTML = createRow(obj);
+    const tempDiv = document.createElement("tr");
+    tempDiv.innerHTML = rowHTML;
 
-  tableBody.append(tempDiv);
+    const btn = tempDiv.querySelector(".table__btn_edit");
+    btn.addEventListener("click", () => {
+      changeOverlay(obj);
+    });
 
-  cmsTotalPrce();
+    const btnPicture = tempDiv.querySelector(".table__btn_pic");
+    btnPicture.addEventListener("click", (event) => {
+      openImageInNewWindow(event);
+    });
+
+    tableBody.append(tempDiv);
+
+    cmsTotalPrce();
+  } else {
+    console.log("ошибка");
+  }
 }
 
 //*Открываем новое окно с картинкой
@@ -167,6 +170,8 @@ function openImageInNewWindow(event) {
   const imageId = target.getAttribute("data-pic");
 
   const item = goodsArray.find((item) => item.id === imageId);
+  console.log("item: ", item);
+  console.log("imageId:imageId ", imageId);
   // const imgString = `/assets/${imageId}.jpg`;
 
   const imgString = `http://localhost:3000/${item.image}`;
@@ -185,16 +190,19 @@ function openImageInNewWindow(event) {
   }
 }
 
-function initTable() {
-  renderGoodsTable();
-
+function openImage() {
   // Найти все кнопки с классом table_btn_pic и добавить обработчик события на клик
   const picButtons = document.querySelectorAll(".table__btn_pic");
   picButtons.forEach((button) => {
     button.addEventListener("click", openImageInNewWindow);
   });
+}
 
-  //! Добавляем новый слушатель
+function initTable() {
+  renderGoodsTable();
+  openImage();
+
+  //! deleteItem
   cms.addEventListener("click", DeleteItem);
 }
 
@@ -227,24 +235,9 @@ function cmsTotalPrce() {
     .then((data) => {
       totalPrice = data.toFixed();
 
-      let discountedTotalPrice = 0; // Создаем переменную для общей суммы с учетом скидки
-
-      goodsArray.forEach((item) => {
-        // Рассчитываем стоимость товара с учетом скидки
-        const discountedPrice = totalPrice * (1 - item.discount / 100);
-
-        // Добавляем стоимость товара к общей сумме с учетом скидки
-        discountedTotalPrice += discountedPrice;
-      });
-      cms__totalPrice.textContent = discountedTotalPrice;
-      console.log("Discounted Total Price: ", discountedTotalPrice);
+      cms__totalPrice.textContent = totalPrice;
     });
 
-  // fetch("http://localhost:3000/api/total")
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     cms__totalPrice.textContent = data.toFixed();
-  //   });
   // cms__totalPrice.textContent = calculateTotalPrice().toFixed();
 }
-export { initTable, cmsTotalPrce, addItemRender };
+export { initTable, cmsTotalPrce, addItemRender, openImage };

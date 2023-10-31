@@ -1,5 +1,5 @@
 //data.js
-import { initTable } from "./table.js";
+import { initTable, openImage } from "./table.js";
 import { sub_pages, sub_choice_pages } from "./Elements.js";
 // let goodsArray = [
 //   {
@@ -26,75 +26,63 @@ function returnArray() {
   fetch("http://localhost:3000/api/goods")
     .then((res) => res.json())
     .then((data) => {
-      console.log("data: ", data);
       goodsArray = data.goods;
-
-      goodsArray.forEach((item, index) => {
-        return (item.NumberId = index + 1);
-      });
       console.log("goodsArray: ", goodsArray);
 
-      lengthArray = goodsArray.length;
-      // sub_pages.textContent = `${goodsArray[0].NumberId}-${goodsArray[9].NumberId} из ${data.totalCount}`;
+      if (goodsArray && goodsArray.length > 0) {
+        goodsArray.forEach((item, index) => {
+          item.NumberId = index + 1;
+        });
 
-      sub_choice_pages.textContent = `Показывать на странице: ${lengthArray}`;
+        lengthArray = goodsArray.length;
+
+        sub_pages.textContent = `${goodsArray[0].NumberId}-${
+          goodsArray[lengthArray - 1].NumberId
+        } из ${data.totalCount}`;
+
+        sub_choice_pages.textContent = `Показывать на странице: ${lengthArray}`;
+      } else {
+        // Обработка случая, когда goodsArray пуст или не существует
+        sub_pages.textContent = "Нет данных";
+        sub_choice_pages.textContent = "Показывать на странице: 0";
+      }
       initTable();
     });
 }
 
 returnArray();
 
-function addGoods(obj, uniqueId) {
-  obj.id = uniqueId;
-
+function addGoods(obj, id) {
+  obj.id = id;
   const maxOrder = goodsArray.reduce(
     (max, item) => (item.NumberId > max ? item.NumberId : max),
     0
   );
   obj.NumberId = maxOrder + 1;
 
-  console.log(obj);
   goodsArray.push(obj);
 }
 
 function removeGoodsById(id) {
   // goodsArray = goodsArray.filter((el) => el.NumberId !== id);
+
   const indexToRemove = goodsArray.findIndex((el) => el.NumberId === id);
-
-  if (indexToRemove !== -1) {
-    goodsArray.splice(indexToRemove, 1);
-
-    // Обновляем номера элементов
-    for (let i = indexToRemove; i < goodsArray.length; i++) {
-      goodsArray[i].NumberId--;
-    }
+  goodsArray.splice(indexToRemove, 1); //с какого удаляем, сколько
+  // Обновляем номера элементов
+  for (let i = indexToRemove; i < goodsArray.length; i++) {
+    goodsArray[i].NumberId--;
   }
-
-  // goodsArray.forEach((item, index) => {
-  //   return (item.NumberId = index + 1);
-  // });
-
-  // coutID = 10 * coutID + 1;
-  // if (coutID === 0) coutID = 1;
-
-  // goodsArray.forEach((item, index) => {
-  //   return (item.NumberId = index + coutID);
-  // });
 
   initTable();
 }
 
-function calculateTotalPrice() {
-  return goodsArray.reduce((acc, obj) => {
-    return acc + obj.price * obj.count * (1 - obj.discount / 100);
-  }, 0);
-}
-
-export { goodsArray, addGoods, removeGoodsById, calculateTotalPrice };
+export { goodsArray, addGoods, removeGoodsById };
 
 //!
 window.addEventListener("click", () => {
   console.log("goodsArray:Click ", goodsArray);
+  // openImage();
+  console.log("goodsArray.length: ", goodsArray.length);
 });
 console.log("module");
 
@@ -160,15 +148,12 @@ next.addEventListener("click", () => {
   if (idValue === page + 1) {
     idValue--;
   }
-  console.log("idValue", idValue);
   fetch(`http://localhost:3000/api/goods?page=${idValue}`)
     .then((res) => res.json())
     .then((data) => {
       page = data.pages;
-      console.log("page: ", page);
 
       coutID = data.page - 1;
-      console.log("coutID: ", coutID);
       coutID = 10 * coutID + 1;
 
       goodsArray = data.goods;
@@ -196,11 +181,9 @@ prev.addEventListener("click", () => {
   fetch(`http://localhost:3000/api/goods?page=${idValue}`)
     .then((res) => res.json())
     .then((data) => {
-      console.log("data: ", data);
       goodsArray = data.goods;
 
       coutID = data.page - 1;
-      console.log("coutID: ", coutID);
       coutID = 10 * coutID + 1;
       if (coutID === 0) coutID = 1;
 
