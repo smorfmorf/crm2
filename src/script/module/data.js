@@ -1,5 +1,5 @@
 //data.js
-import { initTable } from "./table.js";
+import { initTable, cmsTotalPrce } from "./table.js";
 import { sub_pages, sub_choice_pages } from "./Elements.js";
 // let goodsArray = [
 //   {
@@ -83,6 +83,7 @@ function removeGoodsById(id) {
   }
 
   initTable();
+  cmsTotalPrce();
 }
 
 export { goodsArray, addGoods, removeGoodsById };
@@ -176,9 +177,9 @@ next.addEventListener("click", () => {
         });
 
         lengthArray = goodsArray.length;
-        // sub_pages.textContent = `${goodsArray[0].NumberId}-${
-        //   goodsArray[lengthArray - 1].NumberId
-        // } из ${data.totalCount}`;
+        sub_pages.textContent = `${goodsArray[0].NumberId}-${
+          goodsArray[lengthArray - 1].NumberId
+        } из ${data.totalCount}`;
 
         sub_choice_pages.textContent = `Показывать на странице: ${lengthArray}`;
         initTable();
@@ -212,9 +213,9 @@ prev.addEventListener("click", () => {
       });
 
       lengthArray = goodsArray.length;
-      // sub_pages.textContent = `${goodsArray[0].NumberId}-${
-      //   goodsArray[lengthArray - 1].NumberId
-      // } из ${data.totalCount}`;
+      sub_pages.textContent = `${goodsArray[0].NumberId}-${
+        goodsArray[lengthArray - 1].NumberId
+      } из ${data.totalCount}`;
 
       sub_choice_pages.textContent = `Показывать на странице: ${lengthArray}`;
       initTable();

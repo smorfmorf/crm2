@@ -11,6 +11,8 @@ import {
   imageConainer,
 } from "./Elements.js";
 
+import { base64 } from "./modal.js";
+
 function createRow(obj) {
   const row = `     <tr>
     <td class="table__cell">${obj.NumberId}</td>
@@ -26,7 +28,7 @@ function createRow(obj) {
     <td class="table__cell">${obj.units}</td>
     <td class="table__cell">${obj.count}</td>
 
-    <td class="table__cell">${obj.price * (1 - obj.discount / 100)}</td>
+    <td class="table__cell">${obj.price}</td>
 
     <td class="table__cell">${
       obj.count * obj.price * (1 - obj.discount / 100)
@@ -88,14 +90,18 @@ function changeOverlay(item) {
   div.classList.add("modal__submit");
   footer.append(div);
 
-  div.addEventListener("click", () => {
+  div.addEventListener("click", async () => {
     item.title = form.title.value;
     item.category = form.category.value;
     item.description = form.description.value;
     item.units = form.units.value;
     item.count = form.count.value;
-    item.price = form.price.value * (1 - form.discount.value / 100);
+    item.price = form.price.value;
     item.discount = form.discount.value;
+
+    const formData = new FormData(form);
+    const obj = Object.fromEntries(formData);
+    item.image = await base64(obj.image);
 
     fetch(`http://localhost:3000/api/goods/${item.id}`, {
       method: "PATCH",
@@ -103,12 +109,19 @@ function changeOverlay(item) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(item),
-    });
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        item.image = data.image;
+      });
 
     renderGoodsTable();
     form.reset();
     overlay.classList.remove("active");
     cmsTotalPrce();
+
+    const btnPicture = document.querySelector(".table__btn_pic");
+    btnPicture.addEventListener("click", openImageInNewWindow);
   });
 }
 
@@ -153,12 +166,10 @@ function addItemRender(obj, id) {
       changeOverlay(obj);
     });
 
-    const btnPicture = tempDiv.querySelector(".table__btn_pic");
-    btnPicture.addEventListener("click", (event) => {
-      openImageInNewWindow(event);
-    });
-
     tableBody.append(tempDiv);
+
+    const btnPicture = tempDiv.querySelector(".table__btn_pic");
+    btnPicture.addEventListener("click", openImageInNewWindow);
 
     cmsTotalPrce();
   } else {

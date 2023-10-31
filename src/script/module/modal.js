@@ -126,4 +126,4 @@ function formControl() {
   }
 }
 
-export default formControl;
+export { formControl, base64 };
