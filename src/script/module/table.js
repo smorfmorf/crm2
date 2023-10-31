@@ -26,9 +26,11 @@ function createRow(obj) {
     <td class="table__cell">${obj.units}</td>
     <td class="table__cell">${obj.count}</td>
 
-    <td class="table__cell">${obj.price}</td>
+    <td class="table__cell">${obj.price * (1 - obj.discount / 100)}</td>
 
-    <td class="table__cell">${obj.count * obj.price}</td>
+    <td class="table__cell">${
+      obj.count * obj.price * (1 - obj.discount / 100)
+    }</td>
 
     <td class="table__cell table__cell_btn-wrapper">
       <button class="table__btn table__btn_pic" data-pic="${obj.id}"></button>

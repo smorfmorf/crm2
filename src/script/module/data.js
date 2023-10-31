@@ -39,7 +39,7 @@ function returnArray() {
 
       if (goodsArray && goodsArray.length > 0) {
         goodsArray.forEach((item, index) => {
-          item.price = (item.price * (1 - item.discount / 100)).toFixed();
+          // item.price = (item.price * (1 - item.discount / 100)).toFixed();
           item.NumberId = index + 1;
         });
 
@@ -171,7 +171,7 @@ next.addEventListener("click", () => {
         goodsArray = data.goods;
 
         goodsArray.forEach((item, index) => {
-          item.price = (item.price * (1 - item.discount / 100)).toFixed();
+          // item.price = (item.price * (1 - item.discount / 100)).toFixed();
           item.NumberId = index + coutID;
         });
 
@@ -207,7 +207,7 @@ prev.addEventListener("click", () => {
       if (coutID === 0) coutID = 1;
 
       goodsArray.forEach((item, index) => {
-        item.price = (item.price * (1 - item.discount / 100)).toFixed();
+        // item.price = (item.price * (1 - item.discount / 100)).toFixed();
         item.NumberId = index + coutID;
       });
 
