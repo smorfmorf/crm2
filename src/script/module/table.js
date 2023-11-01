@@ -92,18 +92,23 @@ function changeOverlay(item) {
   div.classList.add("modal__submit");
   footer.append(div);
 
-  const imageInput = document.querySelector(".modal__file");
-  imageInput.addEventListener("change", async () => {
-    const file = imageInput.files[0];
-
-    if (file) {
-      const formData = new FormData(form);
-      const obj = Object.fromEntries(formData);
-      item.image = await base64(obj.image);
-    }
-  });
+  const timeImage = item.image;
 
   div.addEventListener("click", () => {
+    const imageInput = document.querySelector(".modal__file");
+    imageInput.addEventListener("change", async () => {
+      console.log("слушатель item", item);
+      const file = imageInput.files[0];
+
+      if (file) {
+        const formData = new FormData(form);
+        const obj = Object.fromEntries(formData);
+        console.log(`ХУЙНЯЯЯЯЯЯЯЯЯ obj`);
+        console.log(obj);
+        item.image = await base64(obj.image);
+      }
+    });
+
     item.title = form.title.value;
     item.category = form.category.value;
     item.description = form.description.value;
@@ -122,10 +127,9 @@ function changeOverlay(item) {
       .then((res) => res.json())
       .then((data) => {
         item.image = data.image;
-
-        // const element = document.querySelector(`[data-pic="${item.id}"]`);
-        // element.addEventListener("click", openImageInNewWindow);
       });
+
+    console.log("ЗАПРОС УШЕЛ СМОТРИМ ЧТО ТУТ", item);
 
     renderGoodsTable();
 
@@ -136,7 +140,6 @@ function changeOverlay(item) {
 }
 
 function renderGoodsTable() {
-  console.log("renderGoodsTable: ");
   tableBody.innerHTML = "";
 
   goodsArray.forEach((item) => {
