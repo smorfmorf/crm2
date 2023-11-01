@@ -92,22 +92,19 @@ function changeOverlay(item) {
   div.classList.add("modal__submit");
   footer.append(div);
 
-  const timeImage = item.image;
+  // const timeImage = item.image;
 
-  div.addEventListener("click", () => {
+  div.addEventListener("click", async () => {
     const imageInput = document.querySelector(".modal__file");
-    imageInput.addEventListener("change", async () => {
-      console.log("слушатель item", item);
-      const file = imageInput.files[0];
+    const file = imageInput.files[0];
 
-      if (file) {
-        const formData = new FormData(form);
-        const obj = Object.fromEntries(formData);
-        console.log(`ХУЙНЯЯЯЯЯЯЯЯЯ obj`);
-        console.log(obj);
-        item.image = await base64(obj.image);
-      }
-    });
+    if (file) {
+      const formData = new FormData(form);
+      const obj = Object.fromEntries(formData);
+      console.log(`ХУЙНЯЯЯЯЯЯЯЯЯ obj`);
+      console.log(obj);
+      item.image = await base64(obj.image);
+    }
 
     item.title = form.title.value;
     item.category = form.category.value;
