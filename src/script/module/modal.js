@@ -80,7 +80,7 @@ function formControl() {
         console.log("obj.image: ", obj.image);
 
         addItemRender(data, id);
-        addGoods(obj, id);
+        // addGoods(obj, id);
       })
       .catch((err) => {
         alert(`Ошибка ${err.message}`);

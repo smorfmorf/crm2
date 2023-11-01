@@ -92,7 +92,6 @@ export { goodsArray, addGoods, removeGoodsById };
 window.addEventListener("click", () => {
   console.log("goodsArray:Click ", goodsArray);
 });
-console.log("module");
 
 //*Search
 const input = document.querySelector(".panel__input");
@@ -102,7 +101,6 @@ input.addEventListener("input", ({ target }) => {
 
   id = setTimeout(() => {
     const value = target.value;
-    console.log("value: ", value);
 
     if (value) {
       goodsArray = goodsArray.filter((good) => good.title.includes(value));
@@ -112,7 +110,6 @@ input.addEventListener("input", ({ target }) => {
         item.NumberId = index + 1;
       });
 
-      console.log("goodsArray: ", goodsArray);
       initTable();
     } else {
       returnArray();
@@ -152,9 +149,6 @@ const next = document.querySelector("#next");
 const prev = document.querySelector("#prev");
 
 next.addEventListener("click", () => {
-  console.log("page", page);
-  console.log("pages", pages);
-
   page++;
   if (page <= pages) {
     fetch(`http://localhost:3000/api/goods?page=${page}`)
@@ -162,9 +156,6 @@ next.addEventListener("click", () => {
       .then((data) => {
         page = data.page;
         pages = data.pages;
-        console.log("DATA_page: ", page);
-        console.log("DATA_pages: ", pages);
-        console.log("DATA_data: ", data);
 
         coutID = data.page - 1;
         coutID = 10 * coutID + 1;
@@ -195,7 +186,6 @@ prev.addEventListener("click", () => {
   console.log("page: ", page);
   if (page === -1 || page === 0) {
     page = 1;
-    console.log("page: = 1 ", page);
   }
 
   fetch(`http://localhost:3000/api/goods?page=${page}`)

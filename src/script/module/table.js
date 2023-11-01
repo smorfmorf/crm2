@@ -1,14 +1,14 @@
 // table.js
 
-import { goodsArray, removeGoodsById, calculateTotalPrice } from "./data.js";
+import { goodsArray, removeGoodsById } from "./data.js";
 import {
   tableBody,
-  cms,
   cms__totalPrice,
   overlay,
   discount,
   inputDiscount,
   imageConainer,
+  cms,
 } from "./Elements.js";
 
 import { base64 } from "./modal.js";
@@ -46,6 +46,7 @@ function createRow(obj) {
 
 function changeOverlay(item) {
   overlay.classList.add("active");
+
   const formid = document.querySelector(".vendor-code__id");
   formid.textContent = item.id;
   const formPrice = document.querySelector(".modal__total-price");
@@ -57,24 +58,23 @@ function changeOverlay(item) {
   close.remove();
 
   const titleInput = form.querySelector("#name");
-  titleInput.value = item.title;
   const categoryInput = form.querySelector("#category");
-  categoryInput.value = item.category;
   const descriptionTextarea = form.querySelector("#description");
-  descriptionTextarea.value = item.description;
   const unitsInput = form.querySelector("#units");
-  unitsInput.value = item.units;
   const discountInput = form.querySelector("#discount_input");
-  discountInput.value = item.discount;
   const countInput = form.querySelector("#count");
-  countInput.value = item.count;
   const priceInput = form.querySelector("#price");
+  titleInput.value = item.title;
+  categoryInput.value = item.category;
+  descriptionTextarea.value = item.description;
+  unitsInput.value = item.units;
+  discountInput.value = item.discount;
+  countInput.value = item.count;
   priceInput.value = item.price;
-
-  console.log("look", item.image);
 
   const img = new Image();
   img.src = `http://localhost:3000/${item.image}`;
+  console.log("img.src: ", img.src);
   imageConainer.innerHTML = "";
   imageConainer.append(img);
 
@@ -95,7 +95,6 @@ function changeOverlay(item) {
   const imageInput = document.querySelector(".modal__file");
   imageInput.addEventListener("change", async () => {
     const file = imageInput.files[0];
-    console.log("file: ", file);
 
     if (file) {
       const formData = new FormData(form);
@@ -104,7 +103,7 @@ function changeOverlay(item) {
     }
   });
 
-  div.addEventListener("click", async () => {
+  div.addEventListener("click", () => {
     item.title = form.title.value;
     item.category = form.category.value;
     item.description = form.description.value;
@@ -123,11 +122,9 @@ function changeOverlay(item) {
       .then((res) => res.json())
       .then((data) => {
         item.image = data.image;
-        console.log("imageChange: ", item.image);
-        console.log("itemChange", item);
 
-        const element = document.querySelector(`[data-pic="${item.id}"]`);
-        element.addEventListener("click", openImageInNewWindow);
+        // const element = document.querySelector(`[data-pic="${item.id}"]`);
+        // element.addEventListener("click", openImageInNewWindow);
       });
 
     renderGoodsTable();
@@ -135,12 +132,12 @@ function changeOverlay(item) {
     form.reset();
     imageConainer.innerHTML = "";
     overlay.classList.remove("active");
-    cmsTotalPrce();
   });
 }
 
 function renderGoodsTable() {
-  tableBody.innerHTML = ""; // Очистить таблицу перед перерисовкой
+  console.log("renderGoodsTable: ");
+  tableBody.innerHTML = "";
 
   goodsArray.forEach((item) => {
     const rowHTML = createRow(item);
@@ -155,6 +152,9 @@ function renderGoodsTable() {
     });
 
     tableBody.append(tempDiv);
+
+    const btnPicture = tempDiv.querySelector(".table__btn_pic");
+    btnPicture.addEventListener("click", openImageInNewWindow);
   });
   cmsTotalPrce();
 }
@@ -170,20 +170,18 @@ function addItemRender(obj, id) {
       0
     );
     obj.NumberId = maxOrder + 1;
+    goodsArray.push(obj);
 
     const rowHTML = createRow(obj);
     const tempDiv = document.createElement("tr");
     tempDiv.innerHTML = rowHTML;
 
-    const btn = tempDiv.querySelector(".table__btn_edit");
-    btn.addEventListener("click", () => {
-      changeOverlay(obj);
-    });
+    // const btn = tempDiv.querySelector(".table__btn_edit");
+    // btn.addEventListener("click", () => {
+    //   changeOverlay(obj);
+    // });
 
     tableBody.append(tempDiv);
-
-    const btnPicture = tempDiv.querySelector(".table__btn_pic");
-    btnPicture.addEventListener("click", openImageInNewWindow);
   } else {
     console.log("ошибка");
   }
@@ -191,13 +189,13 @@ function addItemRender(obj, id) {
 
 //*Открываем новое окно с картинкой
 function openImageInNewWindow(event) {
-  console.log("openImageInNewWindow: ");
-  const target = event.target;
-  const imageId = target.getAttribute("data-pic");
+  const button = event.target;
+  const imageId = button.getAttribute("data-pic");
+  console.log("imageIdNEW: ", imageId);
 
   const item = goodsArray.find((item) => item.id === imageId);
-  console.log("image_OPEN: ", item);
-  console.log("imageId_OPEN ", imageId);
+  console.log("itemNEW: ", item);
+
   // const imgString = `/assets/${imageId}.jpg`;
 
   const imgString = `http://localhost:3000/${item.image}`;
@@ -229,7 +227,7 @@ function initTable() {
   openImage();
 
   //! deleteItem
-  cms.addEventListener("click", DeleteItem);
+  // cms.addEventListener("click", DeleteItem);
 }
 
 function DeleteItem(event) {
